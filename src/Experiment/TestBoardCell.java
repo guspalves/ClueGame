@@ -11,46 +11,37 @@ import java.util.*;
 
 public class TestBoardCell {
 	// Instance variables
-	private int row;
-	private int col;
-	private boolean isRoom;
-	private boolean isOccupied;
-	private Set<TestBoardCell> adjacencyList;
 	
 	// Constructor
 	public TestBoardCell(int row, int col) {
-		this.row = row;
-		this.col = col;
 		
-		// Initializing set
-		adjacencyList = new HashSet<TestBoardCell>();
 	}
 	
 	// Adding a cell to adjacency list
 	void addAdjacency(TestBoardCell cell) {
-		adjacencyList.add(cell);
+		return;
 	}
 	
 	// Getter for adjacency list set
 	public Set<TestBoardCell> getAdjList() {
-		return adjacencyList;
+		return null;
 	}
 
 	// Setter and Getter for isRoom
 	public void setRoom(boolean isRoom) {
-		this.isRoom = isRoom;
+		
 	}
 	
 	public boolean getRoom() {
-		return isRoom;
+		return (Boolean) null;
 	}
 	
 	// Setter and Getter for isOccuppied
 	public void setOccupied(boolean isOccupied) {
-		this.isOccupied = isOccupied;
+		
 	}
 	
 	public boolean getOccupied() {
-		return isOccupied;
+		return (Boolean) null;
 	}
 }
