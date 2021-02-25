@@ -11,10 +11,11 @@ import java.util.*;
 
 public class TestBoardCell {
 	// Instance variables
+	Set<TestBoardCell> adjList;
 	
 	// Constructor
 	public TestBoardCell(int row, int col) {
-		
+		adjList = new HashSet<TestBoardCell>();
 	}
 	
 	// Adding a cell to adjacency list
@@ -24,7 +25,7 @@ public class TestBoardCell {
 	
 	// Getter for adjacency list set
 	public Set<TestBoardCell> getAdjList() {
-		return null;
+		return adjList;
 	}
 
 	// Setter and Getter for isRoom
