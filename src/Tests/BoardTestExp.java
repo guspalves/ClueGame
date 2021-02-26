@@ -62,6 +62,18 @@ class BoardTestExp {
 		Assert.assertEquals(3, adjTestList.size());
 	}
 	
+	// Method to test the adjacency list of the middle of the board
+	@Test
+	public void testCenter() {
+		TestBoardCell cell = board.getCell(2, 2);
+		Set<TestBoardCell> adjTestList = cell.getAdjList();
+		Assert.assertTrue(adjTestList.contains(board.getCell(1, 2)));
+		Assert.assertTrue(adjTestList.contains(board.getCell(2, 1)));
+		Assert.assertTrue(adjTestList.contains(board.getCell(2, 3)));
+		Assert.assertTrue(adjTestList.contains(board.getCell(3, 2)));
+		Assert.assertEquals(4, adjTestList.size());
+	}
+	
 	// Method to test the adjacency list of a left edge
 	@Test
 	public void testLeftEdge() {
