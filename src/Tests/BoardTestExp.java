@@ -105,21 +105,7 @@ class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
 	}
 	
-	// Testing targets with a mix of rooms and occupied
-	@Test
-	public void testTargetsEmpty() {
-		TestBoardCell cell = board.getCell(2, 1);
-		board.calcTargets(cell, 2);
-		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(6, targets.size());
-		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
-		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
-		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(2, 3)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 2)));
-		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
-	}
-	
+	// Testing targets with occupied cells and rooms
 	@Test
 	public void testTargetsMixed() {
 		board.getCell(0, 2).setOccupied(true);
@@ -133,10 +119,7 @@ class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
 	}
 	
-<<<<<<< HEAD
 	// Testing targets with occupied cells on board
-=======
->>>>>>> bf2b1c2496fb72231da8efb40244333a04a2a905
 	@Test
 	public void testTargetsOccupied() {
 		board.getCell(3, 2).setOccupied(true);
@@ -151,10 +134,7 @@ class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
 	}
 	
-<<<<<<< HEAD
 	// Testing targets with rooms on board
-=======
->>>>>>> bf2b1c2496fb72231da8efb40244333a04a2a905
 	@Test
 	public void testTargetsRoom() {
 		board.getCell(0, 2).setRoom(true);
@@ -174,7 +154,5 @@ class BoardTestExp {
 		
 		Assert.assertTrue(targets.contains(board.getCell(2, 1)));
 		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
-
-
 	}
 }
