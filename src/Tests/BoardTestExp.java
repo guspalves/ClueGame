@@ -44,14 +44,26 @@ class BoardTestExp {
 		Assert.assertEquals(2, adjTestList.size());
 	}
 
+	// Method to test the adjacency list of a right edge
 	@Test
 	public void testRightEdge() {
-		
+		TestBoardCell cell = board.getCell(1, 3);
+		Set<TestBoardCell> adjTestList = cell.getAdjList();
+		Assert.assertTrue(adjTestList.contains(board.getCell(0, 3)));
+		Assert.assertTrue(adjTestList.contains(board.getCell(1, 2)));
+		Assert.assertTrue(adjTestList.contains(board.getCell(2, 3)));
+		Assert.assertEquals(3, adjTestList.size());
 	}
 	
+	// Method to test the adjacency list of a left edge
 	@Test
 	public void testLeftEdge() {
-		
+		TestBoardCell cell = board.getCell(2, 0);
+		Set<TestBoardCell> leftEdge = board.getTargets();
+		Assert.assertTrue(leftEdge.contains(board.getCell(3, 0)));
+		Assert.assertTrue(leftEdge.contains(board.getCell(1, 0)));
+		Assert.assertTrue(leftEdge.contains(board.getCell(2, 1)));
+		Assert.assertEquals(3, leftEdge.size());
 	}
 	
 	@Test
