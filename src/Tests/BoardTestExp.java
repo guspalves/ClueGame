@@ -1,3 +1,10 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Tests to ensure the ClueGame will function as expected
+ */
+
 package Tests;
 
 
@@ -66,6 +73,9 @@ class BoardTestExp {
 		Assert.assertEquals(3, leftEdge.size());
 	}
 	
+	/*
+	 * Testing target creation on various the 4x4 board
+	 */
 	@Test
 	public void testTargetsNormal() {
 		TestBoardCell cell = board.getCell(0, 0);
@@ -80,6 +90,22 @@ class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
 	}
 	
+	// Ensuring that targets are expected with no rooms or occupied spaces
+	@Test
+	public void testTargetsEmpty() {
+		TestBoardCell cell = board.getCell(2, 1);
+		board.calcTargets(cell, 2);
+		Set<TestBoardCell> targets = board.getTargets();
+		Assert.assertEquals(6, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
+		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 3)));
+		Assert.assertTrue(targets.contains(board.getCell(3, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
+	}
+	
+	// Testing targets with a mix of rooms and occupied
 	@Test
 	public void testTargetsMixed() {
 		board.getCell(0, 2).setOccupied(true);
@@ -91,5 +117,44 @@ class BoardTestExp {
 		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
 		Assert.assertTrue(targets.contains(board.getCell(3, 3)));
+	}
+	
+	// Testing targets with occupied cells on board
+	@Test
+	public void testTargetsOccupied() {
+		board.getCell(3, 2).setOccupied(true);
+		board.getCell(3, 0).setOccupied(true);
+		board.getCell(0, 1).setOccupied(true);
+		TestBoardCell cell = board.getCell(2, 1);
+		board.calcTargets(cell, 2);
+		Set<TestBoardCell> targets = board.getTargets();
+		Assert.assertEquals(3, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(1, 0)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 3)));
+		Assert.assertTrue(targets.contains(board.getCell(1, 2)));
+	}
+	
+	// Testing targets with rooms on board
+	@Test
+	public void testTargetsRoom() {
+		board.getCell(0, 2).setRoom(true);
+		board.getCell(2, 2).setRoom(true);
+		TestBoardCell cell = board.getCell(1, 1);
+		board.calcTargets(cell, 3);
+		Set<TestBoardCell> targets = board.getTargets();
+		Assert.assertEquals(3, targets.size());
+		Assert.assertTrue(targets.contains(board.getCell(0, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 2)));
+		
+		Assert.assertTrue(targets.contains(board.getCell(0, 3)));
+		Assert.assertTrue(targets.contains(board.getCell(2, 3)));
+		
+		Assert.assertTrue(targets.contains(board.getCell(3, 2)));
+		Assert.assertTrue(targets.contains(board.getCell(3, 0)));
+		
+		Assert.assertTrue(targets.contains(board.getCell(2, 1)));
+		Assert.assertTrue(targets.contains(board.getCell(0, 1)));
+
+
 	}
 }
