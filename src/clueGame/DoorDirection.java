@@ -1,5 +1,5 @@
 package clueGame;
 
-public class DoorDirection {
-
+public enum DoorDirection {
+	LEFT, RIGHT, UP, DOWN;
 }

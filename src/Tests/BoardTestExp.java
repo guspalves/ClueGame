@@ -5,7 +5,7 @@
  * Description: Tests to ensure the ClueGame will function as expected
  */
 
-package Tests;
+package tests;
 
 
 import static org.junit.jupiter.api.Assertions.*;
