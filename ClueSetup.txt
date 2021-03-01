@@ -1,0 +1,14 @@
+// Rooms and Room Cards
+Room, Kitchen, K
+Room, Dining Room, D
+Room, Theater, T
+Room, Bowling Alley, B
+Room, Library, L
+Room, Gym, G
+Room, Pool, P
+Room, Greenhouse, H
+Room, Bedroom, R
+
+// Other Spaces on Board
+Space, Unused, X
+Space, Walkway, W
