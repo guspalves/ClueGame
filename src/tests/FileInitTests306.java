@@ -135,7 +135,7 @@ public class FileInitTests306 {
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
 		
-		// test a closet
+		// test an unused space
 		cell = board.getCell(24, 18);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );

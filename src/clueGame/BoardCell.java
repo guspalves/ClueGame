@@ -18,7 +18,7 @@ public class BoardCell {
 	private char secretPassage;
 	Set<BoardCell> adjList;
 	
-	// Constructor
+	// Constructors
 	public BoardCell(){
 		
 	}
@@ -40,27 +40,22 @@ public class BoardCell {
 	 */
 
 	public DoorDirection getDoorDirection() {
-		// TODO Auto-generated method stub
 		return doorDirection;
 	}
 
 	public boolean isDoorway() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isLabel() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public boolean isRoomCenter() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public char getSecretPassage() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
