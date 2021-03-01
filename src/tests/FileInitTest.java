@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.DoorDirection;
+import clueGame.Room;
 
 class FileInitTest {
 
@@ -43,7 +44,7 @@ class FileInitTest {
 		assertEquals("Library", board.getRoom('L').getName() );
 		assertEquals("Gym", board.getRoom('G').getName() );
 		assertEquals("Pool", board.getRoom('P').getName() );
-		assertEquals("Greenhouse", board.getRoom('G').getName() );
+		assertEquals("Greenhouse", board.getRoom('H').getName() );
 		assertEquals("Bedroom", board.getRoom('R').getName() );
 	}
 	
@@ -59,15 +60,19 @@ class FileInitTest {
 		BoardCell cell = board.getCell(6, 5);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.LEFT, cell.getDoorDirection());
+		
 		cell = board.getCell(4, 11);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.UP, cell.getDoorDirection());
+		
 		cell = board.getCell(15, 18);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.RIGHT, cell.getDoorDirection());
+		
 		cell = board.getCell(17, 13);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.DOWN, cell.getDoorDirection());
+		
 		// Test that walkways are not doors
 		cell = board.getCell(17, 12);
 		assertFalse(cell.isDoorway());
@@ -83,5 +88,57 @@ class FileInitTest {
 					numDoors++;
 			}
 		Assert.assertEquals(16, numDoors);
+	}
+	
+	@Test
+	public void testRooms() {
+		// testing a standard room location
+		BoardCell cell = board.getCell( 0, 19);
+		Room room = board.getRoom( cell ) ;
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Library" ) ;
+		assertFalse( cell.isLabel() );
+		assertFalse( cell.isRoomCenter() ) ;
+		assertFalse( cell.isDoorway()) ;
+
+		// this is a label cell to test
+		cell = board.getCell(18, 20);
+		room = board.getRoom( cell ) ;
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Bowling Alley" ) ;
+		assertTrue( cell.isLabel() );
+		assertTrue( room.getLabelCell() == cell );
+		
+		// this is a room center cell to test
+		cell = board.getCell(21, 4);
+		room = board.getRoom( cell ) ;
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Gym" ) ;
+		assertTrue( cell.isRoomCenter() );
+		assertTrue( room.getCenterCell() == cell );
+		
+		// this is a secret passage test
+		cell = board.getCell(0, 8);
+		room = board.getRoom( cell ) ;
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Bedroom" ) ;
+		assertTrue( cell.getSecretPassage() == 'L' );
+		
+		// test a walkway
+		cell = board.getCell(15, 8);
+		room = board.getRoom( cell ) ;
+		// Note for our purposes, walkways and closets are rooms
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Walkway" ) ;
+		assertFalse( cell.isRoomCenter() );
+		assertFalse( cell.isLabel() );
+		
+		// test a closet
+		cell = board.getCell(9, 11);
+		room = board.getRoom( cell ) ;
+		assertTrue( room != null );
+		assertEquals( room.getName(), "Unused" ) ;
+		assertFalse( cell.isRoomCenter() );
+		assertFalse( cell.isLabel() );
 	}
 }
