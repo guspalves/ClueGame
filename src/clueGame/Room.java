@@ -1,3 +1,10 @@
+ /**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Setting up the Room class
+ */
+
 package clueGame;
 
 public class Room {
@@ -6,29 +13,32 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell labelCell;
 	
+	// Room default constructor
 	public Room() {
 		super();
 	}
 
+	// getter for room name
 	public String getName() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
+	// getter for the label cell
 	public BoardCell getLabelCell() {
-		// TODO Auto-generated method stub
 		return labelCell;
 	}
 
+	// getter for center cell
 	public BoardCell getCenterCell() {
-		// TODO Auto-generated method stub
 		return centerCell;
 	}
 
+	// setter for label cell
 	public void setLabelCell(BoardCell labelCell) {
 		this.labelCell = labelCell;
 	}
 
+	// setter for center cell
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}

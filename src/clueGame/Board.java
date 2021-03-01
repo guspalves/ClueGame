@@ -1,4 +1,5 @@
- /* @author Gustavo Alves
+ /**
+ * @author Gustavo Alves
  * @author Noah Terry
  * 
  * Description: Setting up the TestBoard to run JUnit tests
@@ -17,54 +18,56 @@ public class Board {
 	
 	private static Board theInstance = new Board();
 	
+	// Board constructor
 	private Board() {
 		super();
 	}
 	
+	// Getter for instance
 	public static Board getInstance() {
 		return theInstance;
 	}
 	
+	// Set up for the board
 	public void initialize() {
-		// TODO Auto-generated method stub
 		grid = new BoardCell[numRows][numColumns];
 		roomMap = new HashMap<Character, Room>();
 	}
 	
+	// Set the files to load the data from
 	public void setConfigFiles(String cvsFile, String txtFile) {
-		// TODO Auto-generated method stub
 		layoutConfigFile = cvsFile;
 		setupConfigFile = txtFile;
 		
 	}
-
+	
+	// Load the setup
 	public void loadSetupConfig() {
-		// TODO Auto-generated method stub
 		
 	}
 
+	// Load the layout
 	public void loadLayoutConfig() {
-		// TODO Auto-generated method stub
 		
 	}
 
+	// Getter for the room given a char
 	public Room getRoom(char c) {
-		// TODO Auto-generated method stub
 		return new Room();
 	}
 	
+	// Getter for the room given a cell
 	public Room getRoom(BoardCell cell) {
-		// TODO Auto-generated method stub
 		return new Room();
 	}
 
+	// getter for the number of rows
 	public int getNumRows() {
-		// TODO Auto-generated method stub
 		return numRows;
 	}
 
+	// getter for the number of columns 
 	public int getNumColumns() {
-		// TODO Auto-generated method stub
 		return numColumns;
 	}
 	
