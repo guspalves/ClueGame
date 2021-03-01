@@ -21,8 +21,9 @@ public class TestBoard {
 	// Constructor
 	public TestBoard() {
 		// Initializing targets and grid
-		targets = new HashSet<TestBoardCell>();
 		grid = new TestBoardCell[ROWS][COLS];
+		
+		targets = new HashSet<TestBoardCell>();
 		
 		// Setting up the grid
 		for(int i = 0; i < ROWS; i++) {
@@ -30,11 +31,42 @@ public class TestBoard {
 				grid[i][j] = new TestBoardCell(i, j);
 			}
 		}
+		
+		// Calculating all adjacency grids in each grid cell
+		calcAdjacency();
 	}
 	
 	// calcTargets function
 	public void calcTargets(TestBoardCell startCell, int pathlength) {
-		return;
+		visited = new HashSet<TestBoardCell>();
+		
+		// Adding start location to the visited list
+		visited.add(startCell);
+		
+		findAllTargets(startCell, pathlength);
+	}
+	
+	public void findAllTargets(TestBoardCell startCell, int pathlength) {
+		
+	}
+	
+	public void calcAdjacency() {
+		for(int i = 0; i < ROWS; i++) {
+			for(int j = 0; j < COLS; j++) {
+				if((i - 1) >= 0) {
+					grid[i][j].addAdjacency(grid[i-1][j]);
+				}
+				if((i+1) < ROWS) {
+					grid[i][j].addAdjacency(grid[i+1][j]);
+				}
+				if((j-1) >= 0) {
+					grid[i][j].addAdjacency(grid[i][j-1]);
+				}
+				if((j+1) < COLS) {
+					grid[i][j].addAdjacency(grid[i][j+1]);
+				}
+			}
+		}
 	}
 	
 	// Returning set of targets
