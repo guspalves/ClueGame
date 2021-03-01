@@ -1,5 +1,4 @@
-/**
- * @author Gustavo Alves
+ /* @author Gustavo Alves
  * @author Noah Terry
  * 
  * Description: Setting up the TestBoard to run JUnit tests
@@ -32,8 +31,10 @@ public class Board {
 		roomMap = new HashMap<Character, Room>();
 	}
 	
-	public void setConfigFiles(String file1, String file2) {
+	public void setConfigFiles(String cvsFile, String txtFile) {
 		// TODO Auto-generated method stub
+		layoutConfigFile = cvsFile;
+		setupConfigFile = txtFile;
 		
 	}
 
@@ -49,12 +50,12 @@ public class Board {
 
 	public Room getRoom(char c) {
 		// TODO Auto-generated method stub
-		return roomMap.get(c);
+		return new Room();
 	}
 	
 	public Room getRoom(BoardCell cell) {
 		// TODO Auto-generated method stub
-		return roomMap.get(cell);
+		return new Room();
 	}
 
 	public int getNumRows() {
@@ -69,6 +70,6 @@ public class Board {
 	
 	// Obtaining cell at specific row and col
 	public BoardCell getCell(int row, int col) {
-		return grid[row][col];
+		return new BoardCell();
 	}
 }

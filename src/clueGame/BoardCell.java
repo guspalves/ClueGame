@@ -19,6 +19,10 @@ public class BoardCell {
 	Set<BoardCell> adjList;
 	
 	// Constructor
+	public BoardCell(){
+		
+	}
+	
 	public BoardCell(int row, int col) {
 		this.row = row;
 		this.col = col;

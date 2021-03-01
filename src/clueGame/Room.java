@@ -6,6 +6,10 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell labelCell;
 	
+	public Room() {
+		super();
+	}
+
 	public String getName() {
 		// TODO Auto-generated method stub
 		return name;
@@ -13,12 +17,12 @@ public class Room {
 
 	public BoardCell getLabelCell() {
 		// TODO Auto-generated method stub
-		return null;
+		return labelCell;
 	}
 
 	public BoardCell getCenterCell() {
 		// TODO Auto-generated method stub
-		return null;
+		return centerCell;
 	}
 
 	public void setLabelCell(BoardCell labelCell) {
