@@ -24,6 +24,7 @@ public class TestBoard {
 		grid = new TestBoardCell[ROWS][COLS];
 		
 		targets = new HashSet<TestBoardCell>();
+		visited = new HashSet<TestBoardCell>();
 		
 		// Setting up the grid
 		for(int i = 0; i < ROWS; i++) {
@@ -38,7 +39,9 @@ public class TestBoard {
 	
 	// calcTargets function
 	public void calcTargets(TestBoardCell startCell, int pathlength) {
-		visited = new HashSet<TestBoardCell>();
+		// Setting the visited and targets sets to be empty
+		visited.clear();
+		targets.clear();
 		
 		// Adding start location to the visited list
 		visited.add(startCell);
@@ -47,7 +50,24 @@ public class TestBoard {
 	}
 	
 	public void findAllTargets(TestBoardCell startCell, int pathlength) {
-		
+		Set<TestBoardCell> adjacentCells = startCell.getAdjList();
+		for(TestBoardCell adjCell : adjacentCells) {
+			if(visited.contains(adjCell) || adjCell.getOccupied() == true) {
+				continue;
+			}
+			
+			if(adjCell.getRoom() == true) {
+				targets.add(adjCell);
+				continue;
+			}
+			
+			visited.add(adjCell);
+			
+			if(pathlength == 1) targets.add(adjCell);
+			else findAllTargets(adjCell, pathlength - 1);
+			
+			visited.remove(adjCell);
+		}
 	}
 	
 	public void calcAdjacency() {
