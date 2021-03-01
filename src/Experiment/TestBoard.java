@@ -46,33 +46,47 @@ public class TestBoard {
 		// Adding start location to the visited list
 		visited.add(startCell);
 		
+		// Calling the findALlTargets function
 		findAllTargets(startCell, pathlength);
 	}
 	
+	// findAllTargets method 
 	public void findAllTargets(TestBoardCell startCell, int pathlength) {
+		// Obtaining set of adjacency of startCell
+		
 		Set<TestBoardCell> adjacentCells = startCell.getAdjList();
+		
+		// for each loop to go through adjancecy set for startCell
 		for(TestBoardCell adjCell : adjacentCells) {
+			// check if the cell is occupied or has been visited
 			if(visited.contains(adjCell) || adjCell.getOccupied() == true) {
 				continue;
 			}
 			
+			// check if the cell is a room
 			if(adjCell.getRoom() == true) {
 				targets.add(adjCell);
 				continue;
 			}
 			
+			// Adding adjCell to visited set
 			visited.add(adjCell);
 			
+			// Recursive call
 			if(pathlength == 1) targets.add(adjCell);
 			else findAllTargets(adjCell, pathlength - 1);
 			
+			// Removing adjCell from visited list
 			visited.remove(adjCell);
 		}
 	}
 	
+	// calcAdjacency function
 	public void calcAdjacency() {
+		// Looping through grid
 		for(int i = 0; i < ROWS; i++) {
 			for(int j = 0; j < COLS; j++) {
+				// Making sure it doesn't go outside the grid
 				if((i - 1) >= 0) {
 					grid[i][j].addAdjacency(grid[i-1][j]);
 				}
