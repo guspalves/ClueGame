@@ -7,6 +7,8 @@
 
 package clueGame;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 
 public class Board {
@@ -30,14 +32,61 @@ public class Board {
 	
 	// Set up for the board
 	public void initialize() {
+		// Reading in txt file and figuring out data
+		
+		
+		
+		// Reading in cvs file and figuring out data
+		List<String[]> data = new ArrayList<String[]>();
+		
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);
+			Scanner in = new Scanner(reader);
+			while(in.hasNextLine()) {
+				String temp = in.nextLine();
+				String[] tempList = temp.split(",");
+				data.add(tempList);
+			}
+			
+			in.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to find layout CVS file");
+		}
+		
+		numColumns = data.get(0).length;
+		numRows = data.size();
+		
 		grid = new BoardCell[numRows][numColumns];
-		roomMap = new HashMap<Character, Room>();
+		
+		for(int i = 0; i < numRows; i++) {
+			for(int j = 0; j < numColumns; j++) {
+				char initial = data.get(i)[j].charAt(0);
+				grid[i][j] = new BoardCell(i, j, initial);
+				
+				if(initial != 'W' && initial != 'X') {
+					grid[i][j].setRoom(true);
+				}
+				
+				if(data.get(i)[j].length() > 1) {
+					char secondChar = data.get(i)[j].charAt(1);
+					
+					if(secondChar == '#') {
+						grid[i][j].setRoomLabel(true);
+					}
+					if(secondChar == '*') {
+						grid[i][j].setRoomCenter(true);
+					}					
+				}
+			}
+		}
+				
 	}
 	
 	// Set the files to load the data from
 	public void setConfigFiles(String cvsFile, String txtFile) {
-		layoutConfigFile = cvsFile;
-		setupConfigFile = txtFile;
+		layoutConfigFile = "data/" + cvsFile;
+		setupConfigFile = "data/" + txtFile;
 		
 	}
 	

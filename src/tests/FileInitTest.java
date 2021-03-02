@@ -22,8 +22,8 @@ import clueGame.Room;
 
 class FileInitTest {
 	// Constants for rows and cols
-	public static final int ROWS = 24;
-	public static final int COLS = 22;
+	public static final int ROWS = 25;
+	public static final int COLS = 23;
 
 	// Static variable for board since only one board is used
 	private static Board board;
