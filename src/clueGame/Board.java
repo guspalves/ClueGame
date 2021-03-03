@@ -32,73 +32,12 @@ public class Board {
 	
 	// Set up for the board
 	public void initialize() {
-		// Reading in txt file and figuring out data
-		roomMap = new HashMap<Character, Room>();
-		try {
-			FileReader reader = new FileReader(layoutConfigFile);
-			Scanner in = new Scanner(reader);
-			while(in.hasNextLine()) {
-				String temp = in.nextLine();
-				if(temp.contains("//") || temp.length() == 0) {
-					continue;
-				}
-				String[] tempList = temp.split(",");
-				Room room = new Room(tempList[1].substring(1,tempList[1].length()));
-				Character symbol = tempList[2].charAt(0);
-				roomMap.put(symbol, room);
-			}
-			
-			in.close();
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to find layout CVS file");
-		}
-		
-		// Reading in cvs file and figuring out data
-		List<String[]> data = new ArrayList<String[]>();
-		
-		try {
-			FileReader reader = new FileReader(layoutConfigFile);
-			Scanner in = new Scanner(reader);
-			while(in.hasNextLine()) {
-				String temp = in.nextLine();
-				String[] tempList = temp.split(",");
-				data.add(tempList);
-			}
-			
-			in.close();
-			
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to find layout CVS file");
-		}
-		
-		numColumns = data.get(0).length;
-		numRows = data.size();
-		
-		grid = new BoardCell[numRows][numColumns];
-		
-		for(int i = 0; i < numRows; i++) {
-			for(int j = 0; j < numColumns; j++) {
-				char initial = data.get(i)[j].charAt(0);
-				grid[i][j] = new BoardCell(i, j, initial);
-				
-				if(initial != 'W' && initial != 'X') {
-					grid[i][j].setRoom(true);
-				}
-				
-				if(data.get(i)[j].length() > 1) {
-					char secondChar = data.get(i)[j].charAt(1);
-					
-					if(secondChar == '#') {
-						grid[i][j].setRoomLabel(true);
-					}
-					if(secondChar == '*') {
-						grid[i][j].setRoomCenter(true);
-					}					
-				}
-			}
-		}
-				
+		loadSetupConfig();
+		loadLayoutConfig();
+		System.out.println("HERE");
+
+		System.out.println("HERE2");
+
 	}
 	
 	// Set the files to load the data from
@@ -110,22 +49,103 @@ public class Board {
 	
 	// Load the setup
 	public void loadSetupConfig() {
+		// Reading in txt file and figuring out data
+		roomMap = new HashMap<Character, Room>();
+		try {
+			FileReader reader = new FileReader(setupConfigFile);
+			Scanner in = new Scanner(reader);
+			while(in.hasNextLine()) {
+				String temp = in.nextLine();
+				
+				if(temp.contains("//") || temp.length() == 0) {
+					continue;
+				}
+				
+				String[] tempList = temp.split(", ");
+				Room room = new Room(tempList[1]);
+				Character symbol = tempList[2].charAt(0);
+				roomMap.put(symbol, room);
+			}
+			
+			in.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to find layout CVS file");
+		}
 		
 	}
 
 	// Load the layout
 	public void loadLayoutConfig() {
-		
+		// Reading in cvs file and figuring out data
+		List<String[]> data = new ArrayList<String[]>();
+
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);
+			Scanner in = new Scanner(reader);
+			while (in.hasNextLine()) {
+				String temp = in.nextLine();
+				String[] tempList = temp.split(",");
+				data.add(tempList);
+			}
+
+			in.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to find layout CVS file");
+		}
+
+		numColumns = data.get(0).length;
+		numRows = data.size();
+
+		grid = new BoardCell[numRows][numColumns];
+
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				
+				char initial = data.get(i)[j].charAt(0);
+				
+				grid[i][j] = new BoardCell(i, j, initial);
+
+				if(roomMap.containsKey(initial)) {
+					grid[i][j].setRoom(true);
+				}
+				
+				if (data.get(i)[j].length() > 1) {
+					char secondChar = data.get(i)[j].charAt(1);
+					if (secondChar == '#') {
+						grid[i][j].setRoomLabel(true);
+					}
+					if (secondChar == '*') {
+						grid[i][j].setRoomCenter(true);
+					}
+					
+					if(secondChar == '^') {
+						grid[i][j].setIsDoorway(true);
+						grid[i][j].setDoorDirection(DoorDirection.UP);
+					} else if (secondChar == 'v') {
+						grid[i][j].setIsDoorway(true);
+						grid[i][j].setDoorDirection(DoorDirection.DOWN);
+					} else if (secondChar == '<') {
+						grid[i][j].setIsDoorway(true);
+						grid[i][j].setDoorDirection(DoorDirection.LEFT);
+					}else if (secondChar == '>') {
+						grid[i][j].setIsDoorway(true);
+						grid[i][j].setDoorDirection(DoorDirection.RIGHT);
+					}
+				}
+			}
+		}
 	}
 
 	// Getter for the room given a char
 	public Room getRoom(char c) {
-		return this.roomMap.get(c);
+		return roomMap.get(c);
 	}
 	
 	// Getter for the room given a cell
 	public Room getRoom(BoardCell cell) {
-		return this.roomMap.get(cell);
+		return roomMap.get(cell);
 	}
 
 	// getter for the number of rows
@@ -140,6 +160,6 @@ public class Board {
 	
 	// Obtaining cell at specific row and col
 	public BoardCell getCell(int row, int col) {
-		return new BoardCell();
+		return grid[row][col];
 	}
 }

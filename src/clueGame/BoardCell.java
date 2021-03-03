@@ -14,7 +14,7 @@ public class BoardCell {
 	private int row, col;
 	private char initial;
 	private DoorDirection doorDirection;
-	private boolean roomLabel, roomCenter, isRoom, isSecretPassage;
+	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway;
 	private char secretPassage;
 	Set<BoardCell> adjList;
 	
@@ -27,6 +27,8 @@ public class BoardCell {
 		this.row = row;
 		this.col = col;
 		this.initial = initial;
+		
+		roomLabel = roomCenter = isRoom = isSecretPassage = isDoorway = false;
 		
 		adjList = new HashSet<BoardCell>();
 	}
@@ -45,19 +47,23 @@ public class BoardCell {
 	}
 
 	public boolean isDoorway() {
-		return false;
+		return isDoorway;
 	}
 
 	public boolean isLabel() {
-		return false;
+		return roomLabel;
 	}
 
 	public boolean isRoomCenter() {
-		return false;
+		return roomCenter;
 	}
 
 	public char getSecretPassage() {
 		return 0;
+	}
+	
+	public boolean isRoom() {
+		return isRoom;
 	}
 	
 	// Getter for adjacency list set
@@ -68,6 +74,10 @@ public class BoardCell {
 	/*
 	 * Setters
 	 */
+	
+	public void setIsDoorway(boolean isDoorway) {
+		this.isDoorway = isDoorway;
+	}
 	
 	public void setRoomLabel(boolean roomLabel) {
 		this.roomLabel = roomLabel;
@@ -81,10 +91,6 @@ public class BoardCell {
 		this.secretPassage = secretPassage;
 	}
 
-	public boolean isRoom() {
-		return isRoom;
-	}
-
 	public void setRoom(boolean isRoom) {
 		this.isRoom = isRoom;
 	}
@@ -95,6 +101,10 @@ public class BoardCell {
 
 	public void setSecretPassage(boolean isSecretPassage) {
 		this.isSecretPassage = isSecretPassage;
+	}
+	
+	public void setDoorDirection(DoorDirection doorDirection) {
+		this.doorDirection = doorDirection;
 	}
 }
 
