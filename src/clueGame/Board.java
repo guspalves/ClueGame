@@ -34,10 +34,6 @@ public class Board {
 	public void initialize() {
 		loadSetupConfig();
 		loadLayoutConfig();
-		System.out.println("HERE");
-
-		System.out.println("HERE2");
-
 	}
 	
 	// Set the files to load the data from
