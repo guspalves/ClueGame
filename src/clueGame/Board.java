@@ -36,7 +36,7 @@ public class Board {
 			loadSetupConfig();
 			loadLayoutConfig();
 		} catch (BadConfigFormatException e) {
-			
+			System.out.println(e.getMessage());
 		}
 		
 	}
@@ -63,8 +63,10 @@ public class Board {
 				}
 				
 				String[] tempList = temp.split(", ");
-				
-				if(tempList[0] != "Room" || tempList[0] != "Space" || tempList[2].length() > 1) {
+				String tempString = tempList[0];
+				String roomString = "Room";
+				String spaceString = "Space";
+				if(tempString.equals(roomString) == false && tempString.equals(spaceString) == false) { 
 					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 				}
 				
@@ -120,10 +122,12 @@ public class Board {
 				char initial = data.get(i)[j].charAt(0);
 				
 				grid[i][j] = new BoardCell(i, j, initial);
+				
 
 				if(roomMap.containsKey(initial)) {
 					grid[i][j].setRoom(true);
 				} else {
+					System.out.println(initial);
 					throw new BadConfigFormatException("Board Layout Refers to Room not in Setup File");
 				}
 				
