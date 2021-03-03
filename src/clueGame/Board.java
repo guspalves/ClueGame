@@ -32,8 +32,13 @@ public class Board {
 	
 	// Set up for the board
 	public void initialize() {
-		loadSetupConfig();
-		loadLayoutConfig();
+		try {
+			loadSetupConfig();
+			loadLayoutConfig();
+		} catch (BadConfigFormatException e) {
+			
+		}
+		
 	}
 	
 	// Set the files to load the data from
@@ -44,7 +49,7 @@ public class Board {
 	}
 	
 	// Load the setup
-	public void loadSetupConfig() {
+	public void loadSetupConfig() throws BadConfigFormatException{
 		// Reading in txt file and figuring out data
 		roomMap = new HashMap<Character, Room>();
 		try {
@@ -58,6 +63,11 @@ public class Board {
 				}
 				
 				String[] tempList = temp.split(", ");
+				
+				if(tempList[0] != "Room" || tempList[0] != "Space" || tempList[2].length() > 1) {
+					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
+				}
+				
 				Room room = new Room(tempList[1]);
 				Character symbol = tempList[2].charAt(0);
 				roomMap.put(symbol, room);
@@ -72,7 +82,7 @@ public class Board {
 	}
 
 	// Load the layout
-	public void loadLayoutConfig() {
+	public void loadLayoutConfig() throws BadConfigFormatException{
 		// Reading in cvs file and figuring out data
 		List<String[]> data = new ArrayList<String[]>();
 
@@ -90,9 +100,17 @@ public class Board {
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to find layout CVS file");
 		}
+		
+		numRows = data.size();
+		
+		// Testing to make sure every row has the same number of columns
+		for(int i = 0; i < numRows - 1; i++){
+			if(data.get(i).length != data.get(i+1).length) {
+				throw new BadConfigFormatException("Not all columns are the same size");
+			}
+		}
 
 		numColumns = data.get(0).length;
-		numRows = data.size();
 
 		grid = new BoardCell[numRows][numColumns];
 
@@ -105,6 +123,8 @@ public class Board {
 
 				if(roomMap.containsKey(initial)) {
 					grid[i][j].setRoom(true);
+				} else {
+					throw new BadConfigFormatException("Board Layout Refers to Room not in Setup File");
 				}
 				
 				if (data.get(i)[j].length() > 1) {
