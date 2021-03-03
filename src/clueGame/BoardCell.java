@@ -59,7 +59,7 @@ public class BoardCell {
 	}
 
 	public char getSecretPassage() {
-		return 0;
+		return secretPassage;
 	}
 	
 	public boolean isRoom() {
@@ -71,6 +71,10 @@ public class BoardCell {
 		return adjList;
 	}
 
+	public char getInitial() {
+		return initial;
+	}
+	
 	/*
 	 * Setters
 	 */
@@ -106,5 +110,7 @@ public class BoardCell {
 	public void setDoorDirection(DoorDirection doorDirection) {
 		this.doorDirection = doorDirection;
 	}
+
+	
 }
 

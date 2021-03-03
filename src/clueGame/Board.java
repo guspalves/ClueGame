@@ -108,11 +108,18 @@ public class Board {
 				}
 				
 				if (data.get(i)[j].length() > 1) {
+					
 					char secondChar = data.get(i)[j].charAt(1);
+					if(roomMap.containsKey(secondChar)) {
+						grid[i][j].setSecretPassage(true);
+						grid[i][j].setSecretPassage(secondChar);
+					}
 					if (secondChar == '#') {
+						roomMap.get(initial).setLabelCell(grid[i][j]);
 						grid[i][j].setRoomLabel(true);
 					}
 					if (secondChar == '*') {
+						roomMap.get(initial).setCenterCell(grid[i][j]);
 						grid[i][j].setRoomCenter(true);
 					}
 					
@@ -125,7 +132,7 @@ public class Board {
 					} else if (secondChar == '<') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.LEFT);
-					}else if (secondChar == '>') {
+					} else if (secondChar == '>') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.RIGHT);
 					}
@@ -141,7 +148,7 @@ public class Board {
 	
 	// Getter for the room given a cell
 	public Room getRoom(BoardCell cell) {
-		return roomMap.get(cell);
+		return roomMap.get(cell.getInitial());
 	}
 
 	// getter for the number of rows
