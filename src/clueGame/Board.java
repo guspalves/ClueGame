@@ -33,8 +33,26 @@ public class Board {
 	// Set up for the board
 	public void initialize() {
 		// Reading in txt file and figuring out data
-		
-		
+		roomMap = new HashMap<Character, Room>();
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);
+			Scanner in = new Scanner(reader);
+			while(in.hasNextLine()) {
+				String temp = in.nextLine();
+				if(temp.contains("//") || temp.length() == 0) {
+					continue;
+				}
+				String[] tempList = temp.split(",");
+				Room room = new Room(tempList[1].substring(1,tempList[1].length()));
+				Character symbol = tempList[2].charAt(0);
+				roomMap.put(symbol, room);
+			}
+			
+			in.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to find layout CVS file");
+		}
 		
 		// Reading in cvs file and figuring out data
 		List<String[]> data = new ArrayList<String[]>();
@@ -102,12 +120,12 @@ public class Board {
 
 	// Getter for the room given a char
 	public Room getRoom(char c) {
-		return new Room();
+		return this.roomMap.get(c);
 	}
 	
 	// Getter for the room given a cell
 	public Room getRoom(BoardCell cell) {
-		return new Room();
+		return this.roomMap.get(cell);
 	}
 
 	// getter for the number of rows

@@ -14,8 +14,9 @@ public class Room {
 	private BoardCell labelCell;
 	
 	// Room default constructor
-	public Room() {
+	public Room(String name) {
 		super();
+		this.name = name;
 	}
 
 	// getter for room name
