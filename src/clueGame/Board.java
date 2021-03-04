@@ -54,9 +54,9 @@ public class Board {
 		roomMap = new HashMap<Character, Room>();
 		try {
 			FileReader reader = new FileReader(setupConfigFile);
-			Scanner in = new Scanner(reader);
-			while(in.hasNextLine()) {
-				String temp = in.nextLine();
+			Scanner scan = new Scanner(reader);
+			while(scan.hasNextLine()) {
+				String temp = scan.nextLine();
 				
 				if(temp.contains("//") || temp.length() == 0) {
 					continue;
@@ -75,7 +75,7 @@ public class Board {
 				roomMap.put(symbol, room);
 			}
 			
-			in.close();
+			scan.close();
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to find layout CVS file");
@@ -90,19 +90,20 @@ public class Board {
 
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);
-			Scanner in = new Scanner(reader);
-			while (in.hasNextLine()) {
-				String temp = in.nextLine();
+			Scanner scan = new Scanner(reader);
+			while (scan.hasNextLine()) {
+				String temp = scan.nextLine();
 				String[] tempList = temp.split(",");
 				data.add(tempList);
 			}
 
-			in.close();
+			scan.close();
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to find layout CVS file");
 		}
 		
+		// Set the number of rows
 		numRows = data.size();
 		
 		// Testing to make sure every row has the same number of columns
@@ -112,10 +113,13 @@ public class Board {
 			}
 		}
 
+		// Set the number of columns
 		numColumns = data.get(0).length;
 
+		// Create the grid with the number of rows and columns from the input file
 		grid = new BoardCell[numRows][numColumns];
 
+		// Set the characters in the board for the rooms, walkways, and special cells
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				
@@ -131,6 +135,7 @@ public class Board {
 					throw new BadConfigFormatException("Board Layout Refers to Room not in Setup File");
 				}
 				
+				// Set the special cells
 				if (data.get(i)[j].length() > 1) {
 					
 					char secondChar = data.get(i)[j].charAt(1);
@@ -147,6 +152,7 @@ public class Board {
 						grid[i][j].setRoomCenter(true);
 					}
 					
+					// Set doorways
 					if(secondChar == '^') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.UP);
