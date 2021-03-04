@@ -39,13 +39,13 @@ class FileInitTest {
 	// Testing to see if the correct labels and names are correlated
 	@Test
 	public void testRoomLabels() {
-		assertEquals("Kitchen", board.getRoom('K').getName() );
-		assertEquals("Theater", board.getRoom('T').getName() );
-		assertEquals("Bowling Alley", board.getRoom('B').getName() );
-		assertEquals("Gym", board.getRoom('G').getName() );
-		assertEquals("Pool", board.getRoom('P').getName() );
-		assertEquals("Greenhouse", board.getRoom('H').getName() );
-		assertEquals("Bedroom", board.getRoom('R').getName() );
+		assertEquals("Kitchen", board.getRoom('K').getRoomName() );
+		assertEquals("Theater", board.getRoom('T').getRoomName() );
+		assertEquals("Bowling Alley", board.getRoom('B').getRoomName() );
+		assertEquals("Gym", board.getRoom('G').getRoomName() );
+		assertEquals("Pool", board.getRoom('P').getRoomName() );
+		assertEquals("Greenhouse", board.getRoom('H').getRoomName() );
+		assertEquals("Bedroom", board.getRoom('R').getRoomName() );
 	}
 	
 	@Test
@@ -98,7 +98,7 @@ class FileInitTest {
 		BoardCell cell = board.getCell( 0, 19);
 		Room room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Library" ) ;
+		assertEquals( room.getRoomName(), "Library" ) ;
 		assertFalse( cell.isLabel() );
 		assertFalse( cell.isRoomCenter() ) ;
 		assertFalse( cell.isDoorway()) ;
@@ -107,7 +107,7 @@ class FileInitTest {
 		cell = board.getCell(18, 20);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Bowling Alley" ) ;
+		assertEquals( room.getRoomName(), "Bowling Alley" ) ;
 		assertTrue( cell.isLabel() );
 		assertTrue( room.getLabelCell() == cell );
 		
@@ -115,7 +115,7 @@ class FileInitTest {
 		cell = board.getCell(21, 4);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Gym" ) ;
+		assertEquals( room.getRoomName(), "Gym" ) ;
 		assertTrue( cell.isRoomCenter() );
 		assertTrue( room.getCenterCell() == cell );
 		
@@ -123,14 +123,14 @@ class FileInitTest {
 		cell = board.getCell(0, 8);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Bedroom" ) ;
+		assertEquals( room.getRoomName(), "Bedroom" ) ;
 		assertTrue( cell.getSecretPassage() == 'L' );
 		
 		// Testing the walkways in the board
 		cell = board.getCell(15, 8);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Walkway" ) ;
+		assertEquals( room.getRoomName(), "Walkway" ) ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
 		
@@ -138,7 +138,7 @@ class FileInitTest {
 		cell = board.getCell(9, 11);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Unused" ) ;
+		assertEquals( room.getRoomName(), "Unused" ) ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
 	}

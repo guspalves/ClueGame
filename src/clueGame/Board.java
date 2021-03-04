@@ -125,7 +125,8 @@ public class Board {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				
-				char initial = data.get(i)[j].charAt(0);
+				String dataStr = data.get(i)[j];
+				char initial = dataStr.charAt(0);
 				
 				grid[i][j] = new BoardCell(i, j, initial);
 				
@@ -133,17 +134,16 @@ public class Board {
 				if(roomMap.containsKey(initial)) {
 					grid[i][j].setRoom(true);
 				} else {
-					System.out.println(initial);
 					throw new BadConfigFormatException("Board Layout Refers to Room not in Setup File");
 				}
 				
 				// Set the special cells
-				if (data.get(i)[j].length() > 1) {
+				if (dataStr.length() > 1) {
 					
-					char secondChar = data.get(i)[j].charAt(1);
+					char secondChar = dataStr.charAt(1);
 					if(roomMap.containsKey(secondChar)) {
-						grid[i][j].setSecretPassage(true);
-						grid[i][j].setSecretPassage(secondChar);
+						grid[i][j].setIsSecretPassage(true);
+						grid[i][j].setSecretPassageChar(secondChar);
 					}
 					if (secondChar == '#') {
 						roomMap.get(initial).setLabelCell(grid[i][j]);
