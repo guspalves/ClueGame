@@ -52,6 +52,7 @@ public class Board {
 	public void loadSetupConfig() throws BadConfigFormatException{
 		// Reading in txt file and figuring out data
 		roomMap = new HashMap<Character, Room>();
+	
 		try {
 			FileReader reader = new FileReader(setupConfigFile);
 			Scanner scan = new Scanner(reader);
@@ -88,6 +89,7 @@ public class Board {
 		// Reading in cvs file and figuring out data
 		List<String[]> data = new ArrayList<String[]>();
 
+		// read data from csv and store in a array list of strings by splitting on each ','
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);
 			Scanner scan = new Scanner(reader);
@@ -123,7 +125,8 @@ public class Board {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				
-				char initial = data.get(i)[j].charAt(0);
+				String dataStr = data.get(i)[j];
+				char initial = dataStr.charAt(0);
 				
 				grid[i][j] = new BoardCell(i, j, initial);
 				
@@ -136,12 +139,12 @@ public class Board {
 				}
 				
 				// Set the special cells
-				if (data.get(i)[j].length() > 1) {
+				if (dataStr.length() > 1) {
 					
-					char secondChar = data.get(i)[j].charAt(1);
+					char secondChar = dataStr.charAt(1);
 					if(roomMap.containsKey(secondChar)) {
-						grid[i][j].setSecretPassage(true);
-						grid[i][j].setSecretPassage(secondChar);
+						grid[i][j].setIsSecretPassage(true);
+						grid[i][j].setSecretPassageChar(secondChar);
 					}
 					if (secondChar == '#') {
 						roomMap.get(initial).setLabelCell(grid[i][j]);

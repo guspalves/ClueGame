@@ -91,7 +91,7 @@ public class BoardCell {
 		this.roomCenter = roomCenter;
 	}
 
-	public void setSecretPassage(char secretPassage) {
+	public void setSecretPassageChar(char secretPassage) {
 		this.secretPassage = secretPassage;
 	}
 
@@ -103,7 +103,7 @@ public class BoardCell {
 		return isSecretPassage;
 	}
 
-	public void setSecretPassage(boolean isSecretPassage) {
+	public void setIsSecretPassage(boolean isSecretPassage) {
 		this.isSecretPassage = isSecretPassage;
 	}
 	
