@@ -125,8 +125,7 @@ public class Board {
 		for (int i = 0; i < numRows; i++) {
 			for (int j = 0; j < numColumns; j++) {
 				
-				String dataStr = data.get(i)[j];
-				char initial = dataStr.charAt(0);
+				char initial = data.get(i)[j].charAt(0);
 				
 				grid[i][j] = new BoardCell(i, j, initial);
 				
@@ -139,12 +138,12 @@ public class Board {
 				}
 				
 				// Set the special cells
-				if (dataStr.length() > 1) {
+				if (data.get(i)[j].length() > 1) {
 					
-					char secondChar = dataStr.charAt(1);
+					char secondChar = data.get(i)[j].charAt(1);
 					if(roomMap.containsKey(secondChar)) {
-						grid[i][j].setIsSecretPassage(true);
-						grid[i][j].setSecretPassageChar(secondChar);
+						grid[i][j].setSecretPassage(true);
+						grid[i][j].setSecretPassage(secondChar);
 					}
 					if (secondChar == '#') {
 						roomMap.get(initial).setLabelCell(grid[i][j]);

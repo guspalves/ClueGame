@@ -20,7 +20,7 @@ public class Room {
 	}
 
 	// getter for room name
-	public String getRoomName() {
+	public String getName() {
 		return name;
 	}
 
