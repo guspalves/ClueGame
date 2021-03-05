@@ -14,7 +14,7 @@ public class BoardCell {
 	private int row, col;
 	private char initial;
 	private DoorDirection doorDirection;
-	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway;
+	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway, isOccupied;
 	private char secretPassage;
 	Set<BoardCell> adjList;
 	
@@ -75,6 +75,10 @@ public class BoardCell {
 		return initial;
 	}
 	
+	public boolean getIsOccupied() {
+		return isOccupied;
+	}
+	
 	/*
 	 * Setters
 	 */
@@ -109,6 +113,10 @@ public class BoardCell {
 	
 	public void setDoorDirection(DoorDirection doorDirection) {
 		this.doorDirection = doorDirection;
+	}
+
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;	
 	}
 
 	
