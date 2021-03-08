@@ -52,7 +52,7 @@ class BoardAdjTargetTest {
 		// Testing the kitchen with two doors and a secret room
 		testList = board.getAdjList(9, 19);
 		assertEquals(3, testList.size());
-		assertTrue(testList.contains(board.getCell(2, 22)));
+		assertTrue(testList.contains(board.getCell(21, 4)));
 		assertTrue(testList.contains(board.getCell(11, 17)));
 		assertTrue(testList.contains(board.getCell(11, 18)));
 	}
@@ -114,7 +114,7 @@ class BoardAdjTargetTest {
 		testList = board.getAdjList(5,21);
 		assertEquals(3, testList.size());
 		assertTrue(testList.contains(board.getCell(4, 21)));
-		assertTrue(testList.contains(board.getCell(3, 21)));
+		assertTrue(testList.contains(board.getCell(6, 21)));
 		assertTrue(testList.contains(board.getCell(5, 20)));
 
 	}

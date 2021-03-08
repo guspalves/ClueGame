@@ -11,11 +11,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+import Experiment.TestBoardCell;
+
 public class Board {
 	// Instance variables
 	private BoardCell[][] grid;
 	private int numRows, numColumns;
 	private String layoutConfigFile, setupConfigFile;
+	private List<BoardCell> totalDoorWays;
 	private Map<Character, Room> roomMap;
 	
 	private static Board theInstance = new Board();
@@ -32,13 +35,109 @@ public class Board {
 	
 	// Set up for the board
 	public void initialize() {
+		totalDoorWays = new ArrayList<BoardCell>();
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
+		} finally {
+			calculateAdjacency();
 		}
-		
+	}
+	
+	public void calculateAdjacency() {
+		// Calculating which door ways lead to what rooms
+		parseDoorways();
+
+		// Looping through grid
+		for(int i = 0; i < numRows; i++) {
+			for(int j = 0; j < numColumns; j++) {
+				// Checks if it's a room
+				if(grid[i][j].getInitial() != 'W' && grid[i][j].getInitial() != 'X') {
+
+					// Adding door ways to adjacency list of room
+					ArrayList<BoardCell> doors = roomMap.get(grid[i][j].getInitial()).getDoorWays();
+					for(BoardCell door : doors) {
+						grid[i][j].addAdjacency(door);
+					}
+
+					// Calculating adjacency if it has a secret passage
+					if(roomMap.get(grid[i][j].getInitial()).isHasSecretpassage()) {
+						// Adding secret passage to adjacency
+						BoardCell temp = roomMap.get(grid[i][j].getInitial()).getPassage();
+
+						// Adding center cell of end destination of secret passage to adjList
+						grid[i][j].addAdjacency(roomMap.get(temp.getSecretPassage()).getCenterCell());
+					}
+					
+					continue;
+				}
+				
+				// Calculating adjacency of doorways
+				if(grid[i][j].isDoorway()) {
+					grid[i][j].addAdjacency(roomMap.get(grid[i][j].getEntryToRoom()).getCenterCell());
+					if(grid[i-1][j].getInitial() == 'W' && (i-1) > 0) {
+						grid[i][j].addAdjacency(grid[i-1][j]);
+					}
+					if(grid[i+1][j].getInitial() == 'W' && (i+1) < numRows) {
+						grid[i][j].addAdjacency(grid[i+1][j]);
+					}
+					if(grid[i][j-1].getInitial() == 'W' && (j-1) > 0) {
+						grid[i][j].addAdjacency(grid[i][j-1]);
+					}
+					if(grid[i][j+1].getInitial() == 'W' && (j+1) < numColumns) {
+						grid[i][j].addAdjacency(grid[i][j+1]);
+					}
+					
+					continue;
+				}
+				
+				// Making sure it doesn't go outside the grid and adding adjacent walkways
+				if((i - 1) >= 0) {
+					if(grid[i-1][j].getInitial() == 'W') {
+						grid[i][j].addAdjacency(grid[i-1][j]);
+					}
+				}
+				if((i+1) < numRows) {
+					if(grid[i+1][j].getInitial() == 'W') {
+						grid[i][j].addAdjacency(grid[i+1][j]);
+					}
+				}
+				if((j-1) >= 0) {
+					if(grid[i][j-1].getInitial() == 'W') {
+						grid[i][j].addAdjacency(grid[i][j-1]);
+					}
+				}
+				if((j+1) < numColumns) {
+					if(grid[i][j+1].getInitial() == 'W') {
+						grid[i][j].addAdjacency(grid[i][j+1]);
+					}
+				}
+			}
+		}
+	}
+	
+	// Method to determine which door leads to what room
+	public void parseDoorways() {
+		for(BoardCell door : totalDoorWays) {
+			if(door.getDoorDirection() == DoorDirection.UP) {
+				// Adding that doorway to the ArrayList stored in Room
+				roomMap.get(grid[door.getRow() - 1][door.getCol()].getInitial()).addDoorway(door);
+				
+				// Setting the EntryToRoom character in the BoardCell corresponding to the board at that index
+				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow() - 1][door.getCol()].getInitial());
+			} else if (door.getDoorDirection() == DoorDirection.DOWN) {
+				roomMap.get(grid[door.getRow() + 1][door.getCol()].getInitial()).addDoorway(door);
+				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow() + 1][door.getCol()].getInitial());
+			} else if (door.getDoorDirection() == DoorDirection.RIGHT) {
+				roomMap.get(grid[door.getRow()][door.getCol() + 1].getInitial()).addDoorway(door);
+				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow()][door.getCol() + 1].getInitial());
+			} else if (door.getDoorDirection() == DoorDirection.LEFT) {
+				roomMap.get(grid[door.getRow()][door.getCol() - 1].getInitial()).addDoorway(door);
+				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow()][door.getCol() - 1].getInitial());
+			} 
+		}
 	}
 	
 	// Set the files to load the data from
@@ -144,6 +243,10 @@ public class Board {
 					if(roomMap.containsKey(secondChar)) {
 						grid[i][j].setIsSecretPassage(true);
 						grid[i][j].setSecretPassageChar(secondChar);
+						
+						// Setting the secret passage parameters in target Room
+						roomMap.get(initial).setHasSecretpassage(true);
+						roomMap.get(initial).setSecretPassage(grid[i][j]);
 					}
 					if (secondChar == '#') {
 						roomMap.get(initial).setLabelCell(grid[i][j]);
@@ -158,15 +261,19 @@ public class Board {
 					if(secondChar == '^') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.UP);
+						totalDoorWays.add(grid[i][j]);
 					} else if (secondChar == 'v') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.DOWN);
+						totalDoorWays.add(grid[i][j]);
 					} else if (secondChar == '<') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.LEFT);
+						totalDoorWays.add(grid[i][j]);
 					} else if (secondChar == '>') {
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.RIGHT);
+						totalDoorWays.add(grid[i][j]);
 					}
 				}
 			}
@@ -199,11 +306,11 @@ public class Board {
 	}
 
 	public Set<BoardCell> getAdjList(int row, int col) {
-		return new HashSet<BoardCell>();
+		return grid[row][col].getAdjList();
 	}
 
 	public void calcTargets(BoardCell cell, int pathlength) {
-		
+
 	}
 
 	public Set<BoardCell> getTargets() {

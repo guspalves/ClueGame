@@ -16,6 +16,7 @@ public class BoardCell {
 	private DoorDirection doorDirection;
 	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway, isOccupied;
 	private char secretPassage;
+	private char entryToRoom;
 	Set<BoardCell> adjList;
 	
 	// Constructors
@@ -117,6 +118,22 @@ public class BoardCell {
 
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;	
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public char getEntryToRoom() {
+		return entryToRoom;
+	}
+
+	public void setEntryToRoom(char entryToRoom) {
+		this.entryToRoom = entryToRoom;
 	}
 
 	
