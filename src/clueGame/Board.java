@@ -36,6 +36,7 @@ public class Board {
 	
 	// Set up for the board
 	public void initialize() {
+		// Init for sets and arrays
 		totalDoorWays = new ArrayList<BoardCell>();
 		targets = new HashSet<BoardCell>();
 		visited = new HashSet<BoardCell>();
@@ -56,19 +57,22 @@ public class Board {
 		// Looping through grid
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
-				// Checks if it's a room
-				if(grid[i][j].getInitial() != 'W' && grid[i][j].getInitial() != 'X') {
-
+				char initial = grid[i][j].getInitial();
+				
+				// Checks if it's a room		
+				if(initial != 'W' && initial != 'X') {
+					Room room = roomMap.get(initial);
+					
 					// Adding door ways to adjacency list of room
-					ArrayList<BoardCell> doors = roomMap.get(grid[i][j].getInitial()).getDoorWays();
+					ArrayList<BoardCell> doors = room.getDoorWays();
 					for(BoardCell door : doors) {
 						grid[i][j].addAdjacency(door);
 					}
 
 					// Calculating adjacency if it has a secret passage
-					if(roomMap.get(grid[i][j].getInitial()).isHasSecretpassage()) {
+					if(room.isHasSecretpassage()) {
 						// Adding secret passage to adjacency
-						BoardCell temp = roomMap.get(grid[i][j].getInitial()).getPassage();
+						BoardCell temp = room.getPassage();
 
 						// Adding center cell of end destination of secret passage to adjList
 						grid[i][j].addAdjacency(roomMap.get(temp.getSecretPassage()).getCenterCell());
@@ -124,21 +128,23 @@ public class Board {
 	// Method to determine which door leads to what room
 	public void parseDoorways() {
 		for(BoardCell door : totalDoorWays) {
+			int row = door.getRow();
+			int col = door.getCol();
 			if(door.getDoorDirection() == DoorDirection.UP) {
 				// Adding that doorway to the ArrayList stored in Room
-				roomMap.get(grid[door.getRow() - 1][door.getCol()].getInitial()).addDoorway(door);
+				roomMap.get(grid[row - 1][col].getInitial()).addDoorway(door);
 				
 				// Setting the EntryToRoom character in the BoardCell corresponding to the board at that index
-				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow() - 1][door.getCol()].getInitial());
+				grid[row][col].setEntryToRoom(grid[row - 1][col].getInitial());
 			} else if (door.getDoorDirection() == DoorDirection.DOWN) {
-				roomMap.get(grid[door.getRow() + 1][door.getCol()].getInitial()).addDoorway(door);
-				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow() + 1][door.getCol()].getInitial());
+				roomMap.get(grid[row + 1][col].getInitial()).addDoorway(door);
+				grid[row][col].setEntryToRoom(grid[row + 1][col].getInitial());
 			} else if (door.getDoorDirection() == DoorDirection.RIGHT) {
-				roomMap.get(grid[door.getRow()][door.getCol() + 1].getInitial()).addDoorway(door);
-				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow()][door.getCol() + 1].getInitial());
+				roomMap.get(grid[row][col + 1].getInitial()).addDoorway(door);
+				grid[row][col].setEntryToRoom(grid[row][col + 1].getInitial());
 			} else if (door.getDoorDirection() == DoorDirection.LEFT) {
-				roomMap.get(grid[door.getRow()][door.getCol() - 1].getInitial()).addDoorway(door);
-				grid[door.getRow()][door.getCol()].setEntryToRoom(grid[door.getRow()][door.getCol() - 1].getInitial());
+				roomMap.get(grid[row][col - 1].getInitial()).addDoorway(door);
+				grid[row][col].setEntryToRoom(grid[row][col - 1].getInitial());
 			} 
 		}
 	}
