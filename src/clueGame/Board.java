@@ -20,7 +20,8 @@ public class Board {
 	private String layoutConfigFile, setupConfigFile;
 	private List<BoardCell> totalDoorWays;
 	private Map<Character, Room> roomMap;
-	
+	private Set<BoardCell> targets;
+	private Set<BoardCell> visited;
 	private static Board theInstance = new Board();
 	
 	// Board constructor
@@ -36,6 +37,8 @@ public class Board {
 	// Set up for the board
 	public void initialize() {
 		totalDoorWays = new ArrayList<BoardCell>();
+		targets = new HashSet<BoardCell>();
+		visited = new HashSet<BoardCell>();
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
@@ -231,7 +234,11 @@ public class Board {
 				
 
 				if(roomMap.containsKey(initial)) {
-					grid[i][j].setRoom(true);
+					if(initial != 'W' && initial != 'X') {
+						grid[i][j].setRoom(true);
+					} else {
+						grid[i][j].setRoom(false);
+					}
 				} else {
 					throw new BadConfigFormatException("Board Layout Refers to Room not in Setup File");
 				}
@@ -310,11 +317,52 @@ public class Board {
 	}
 
 	public void calcTargets(BoardCell cell, int pathlength) {
+		// Setting the visited and targets sets to be empty
+		visited.clear();
+		targets.clear();
 
+		// Adding start location to the visited list
+		visited.add(cell);
+
+		// Calling the findALlTargets function
+		findAllTargets(cell, pathlength);
+	}
+	
+	public void findAllTargets(BoardCell startCell, int pathlength) {
+		// Obtaining set of adjacency of startCell
+		Set<BoardCell> adjacentCells = startCell.getAdjList();
+		
+		// for each loop to go through adjancecy set for startCell
+		for(BoardCell adjCell : adjacentCells) {
+			// check if the cell is occupied or has been visited
+			if(visited.contains(adjCell) || adjCell.getIsOccupied() == true) {
+				if(roomMap.get(adjCell.getInitial()).getCenterCell() == adjCell && !visited.contains(adjCell)) {
+					targets.add(adjCell);
+				}
+				
+				continue;
+			}
+			
+			// check if the cell is a room
+			if(adjCell.isRoom() == true) {
+				targets.add(adjCell);
+				continue;
+			}
+			
+			// Adding adjCell to visited set
+			visited.add(adjCell);
+			
+			// Recursive call
+			if(pathlength == 1) targets.add(adjCell);
+			else findAllTargets(adjCell, (pathlength - 1));
+			
+			// Removing adjCell from visited list
+			visited.remove(adjCell);
+		}
 	}
 
 	public Set<BoardCell> getTargets() {
-		return new HashSet<BoardCell>();
+		return targets;
 	}
 
 }
