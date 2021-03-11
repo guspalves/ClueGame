@@ -27,53 +27,55 @@ public class Room {
 		doorWays = new ArrayList<BoardCell>();
 	}
 
-	// getter for room name
+	/*
+	 * Getters
+	 */
 	public String getRoomName() {
 		return name;
 	}
 
-	// getter for the label cell
 	public BoardCell getLabelCell() {
 		return labelCell;
 	}
 
-	// getter for center cell
 	public BoardCell getCenterCell() {
 		return centerCell;
 	}
+	
+	public boolean isHasSecretpassage() {
+		return hasSecretpassage;
+	}
+	
+	public BoardCell getPassage() {
+		return secretPassage;
+	}
+	
+	/*
+	 * Setters
+	 */
+	
+	public void setSecretPassage(BoardCell secretPassage) {
+		this.secretPassage = secretPassage;
+	}
 
-	// setter for label cell
 	public void setLabelCell(BoardCell labelCell) {
 		this.labelCell = labelCell;
 	}
 
-	// setter for center cell
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}
 
-	public boolean isHasSecretpassage() {
-		return hasSecretpassage;
-	}
-
 	public void setHasSecretpassage(boolean hasSecretpassage) {
 		this.hasSecretpassage = hasSecretpassage;
-	}
-
-	public BoardCell getPassage() {
-		return secretPassage;
-	}
-
-	public void setSecretPassage(BoardCell secretPassage) {
-		this.secretPassage = secretPassage;
-	}
-	
-	public void addDoorway(BoardCell doorWay) {
-		doorWays.add(doorWay);
 	}
 	
 	public ArrayList<BoardCell> getDoorWays() {
 		return doorWays;
 	}
 
+	// Adding doorWay to ArrayList of Doorways
+	public void addDoorway(BoardCell doorWay) {
+		doorWays.add(doorWay);
+	}
 }

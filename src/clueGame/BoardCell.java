@@ -67,7 +67,6 @@ public class BoardCell {
 		return isRoom;
 	}
 	
-	// Getter for adjacency list set
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
@@ -78,6 +77,18 @@ public class BoardCell {
 	
 	public boolean getIsOccupied() {
 		return isOccupied;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public char getEntryToRoom() {
+		return entryToRoom;
 	}
 	
 	/*
@@ -118,18 +129,6 @@ public class BoardCell {
 
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;	
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public int getCol() {
-		return col;
-	}
-
-	public char getEntryToRoom() {
-		return entryToRoom;
 	}
 
 	public void setEntryToRoom(char entryToRoom) {
