@@ -198,22 +198,26 @@ public class Board {
 		for(BoardCell door : totalDoorWays) {
 			int row = door.getRow();
 			int col = door.getCol();
-			if(door.getDoorDirection() == DoorDirection.UP) {
+			switch(door.getDoorDirection()) {
+			case UP:
 				// Adding that doorway to the ArrayList stored in Room
 				roomMap.get(grid[row - 1][col].getInitial()).addDoorway(door);
-
 				// Setting the EntryToRoom character in the BoardCell corresponding to the board at that index
 				grid[row][col].setEntryToRoom(grid[row - 1][col].getInitial());
-			} else if (door.getDoorDirection() == DoorDirection.DOWN) {
+				break;
+			case DOWN:
 				roomMap.get(grid[row + 1][col].getInitial()).addDoorway(door);
 				grid[row][col].setEntryToRoom(grid[row + 1][col].getInitial());
-			} else if (door.getDoorDirection() == DoorDirection.RIGHT) {
+				break;
+			case RIGHT:
 				roomMap.get(grid[row][col + 1].getInitial()).addDoorway(door);
 				grid[row][col].setEntryToRoom(grid[row][col + 1].getInitial());
-			} else if (door.getDoorDirection() == DoorDirection.LEFT) {
+				break;
+			case LEFT:
 				roomMap.get(grid[row][col - 1].getInitial()).addDoorway(door);
 				grid[row][col].setEntryToRoom(grid[row][col - 1].getInitial());
-			} 
+				break;
+			}
 		}
 	}
 
