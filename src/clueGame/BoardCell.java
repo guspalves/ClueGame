@@ -29,8 +29,6 @@ public class BoardCell {
 		this.col = col;
 		this.initial = initial;
 		
-		roomLabel = roomCenter = isRoom = isSecretPassage = isDoorway = false;
-		
 		adjList = new HashSet<BoardCell>();
 	}
 	
