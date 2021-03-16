@@ -235,7 +235,11 @@ public class Board {
 		// Looping through grid
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
-				char initial = grid[i][j].getInitial();
+				// Obtaining wanted cell
+				BoardCell tempCell = grid[i][j];
+				
+				// Obtaining wanted char
+				char initial = tempCell.getInitial();
 
 				// Checks if it's a room		
 				if(initial != walkwayChar && initial != unusedChar) {
@@ -244,7 +248,7 @@ public class Board {
 					// Adding door ways to adjacency list of room
 					ArrayList<BoardCell> doors = room.getDoorWays();
 					for(BoardCell door : doors) {
-						grid[i][j].addAdjacency(door);
+						tempCell.addAdjacency(door);
 					}
 
 					// Calculating adjacency if it has a secret passage
@@ -253,36 +257,36 @@ public class Board {
 						BoardCell temp = room.getPassage();
 
 						// Adding center cell of end destination of secret passage to adjList
-						grid[i][j].addAdjacency(roomMap.get(temp.getSecretPassage()).getCenterCell());
+						tempCell.addAdjacency(roomMap.get(temp.getSecretPassage()).getCenterCell());
 					}
 
 					continue;
 				}
 
 				// Calculating adjacency of doorways
-				if(grid[i][j].isDoorway()) {
-					grid[i][j].addAdjacency(roomMap.get(grid[i][j].getEntryToRoom()).getCenterCell());
+				if(tempCell.isDoorway()) {
+					tempCell.addAdjacency(roomMap.get(tempCell.getEntryToRoom()).getCenterCell());
 				}
 
 				// Making sure it doesn't go outside the grid and adding adjacent walkways
 				if((i - 1) >= 0) {
 					if(grid[i-1][j].getInitial() == walkwayChar) {
-						grid[i][j].addAdjacency(grid[i-1][j]);
+						tempCell.addAdjacency(grid[i-1][j]);
 					}
 				}
 				if((i+1) < numRows) {
 					if(grid[i+1][j].getInitial() == walkwayChar) {
-						grid[i][j].addAdjacency(grid[i+1][j]);
+						tempCell.addAdjacency(grid[i+1][j]);
 					}
 				}
 				if((j-1) >= 0) {
 					if(grid[i][j-1].getInitial() == walkwayChar) {
-						grid[i][j].addAdjacency(grid[i][j-1]);
+						tempCell.addAdjacency(grid[i][j-1]);
 					}
 				}
 				if((j+1) < numColumns) {
 					if(grid[i][j+1].getInitial() == walkwayChar) {
-						grid[i][j].addAdjacency(grid[i][j+1]);
+						tempCell.addAdjacency(grid[i][j+1]);
 					}
 				}
 			}
