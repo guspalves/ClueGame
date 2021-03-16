@@ -50,9 +50,6 @@ public class Board {
 		}
 	}
 
-
-
-
 	// Set the files to load the data from
 	public void setConfigFiles(String cvsFile, String txtFile) {
 		layoutConfigFile = "data/" + cvsFile;
@@ -77,9 +74,8 @@ public class Board {
 
 				String[] tempList = temp.split(", ");
 				String tempString = tempList[0];
-				String roomString = "Room";
-				String spaceString = "Space";
-				if(tempString.equals(roomString) == false && tempString.equals(spaceString) == false) { 
+				
+				if(tempString.equals("Room") == false && tempString.equals("Space") == false) { 
 					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 				}
 
@@ -255,16 +251,16 @@ public class Board {
 				// Calculating adjacency of doorways
 				if(grid[i][j].isDoorway()) {
 					grid[i][j].addAdjacency(roomMap.get(grid[i][j].getEntryToRoom()).getCenterCell());
-					if(grid[i-1][j].getInitial() == 'W' && (i-1) > 0) {
+					if((i-1) >= 0 && grid[i-1][j].getInitial() == 'W') {
 						grid[i][j].addAdjacency(grid[i-1][j]);
 					}
-					if(grid[i+1][j].getInitial() == 'W' && (i+1) < numRows) {
+					if((i+1) < numRows && grid[i+1][j].getInitial() == 'W') {
 						grid[i][j].addAdjacency(grid[i+1][j]);
 					}
-					if(grid[i][j-1].getInitial() == 'W' && (j-1) > 0) {
+					if((j-1) >= 0 && grid[i][j-1].getInitial() == 'W') {
 						grid[i][j].addAdjacency(grid[i][j-1]);
 					}
-					if(grid[i][j+1].getInitial() == 'W' && (j+1) < numColumns) {
+					if((j+1) < numColumns && grid[i][j+1].getInitial() == 'W') {
 						grid[i][j].addAdjacency(grid[i][j+1]);
 					}
 
@@ -313,7 +309,7 @@ public class Board {
 		// Obtaining set of adjacency of startCell
 		Set<BoardCell> adjacentCells = startCell.getAdjList();
 
-		// for each loop to go through adjancecy set for startCell
+		// for each loop to go through adjacency set for startCell
 		for(BoardCell adjCell : adjacentCells) {
 			// check if the cell is occupied or has been visited
 			if(visited.contains(adjCell) || adjCell.getIsOccupied() == true) {
