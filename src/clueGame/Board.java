@@ -310,6 +310,7 @@ public class Board {
 		for(BoardCell adjCell : adjacentCells) {
 			// check if the cell is occupied or has been visited
 			if(visited.contains(adjCell) || adjCell.getIsOccupied() == true) {
+				// Making sure the player can go to room center even if it is occupied
 				if(roomMap.get(adjCell.getInitial()).getCenterCell() == adjCell && !visited.contains(adjCell)) {
 					targets.add(adjCell);
 				}
