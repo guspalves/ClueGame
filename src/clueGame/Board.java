@@ -255,20 +255,6 @@ public class Board {
 				// Calculating adjacency of doorways
 				if(grid[i][j].isDoorway()) {
 					grid[i][j].addAdjacency(roomMap.get(grid[i][j].getEntryToRoom()).getCenterCell());
-					if((i-1) >= 0 && grid[i-1][j].getInitial() == 'W') {
-						grid[i][j].addAdjacency(grid[i-1][j]);
-					}
-					if((i+1) < numRows && grid[i+1][j].getInitial() == 'W') {
-						grid[i][j].addAdjacency(grid[i+1][j]);
-					}
-					if((j-1) >= 0 && grid[i][j-1].getInitial() == 'W') {
-						grid[i][j].addAdjacency(grid[i][j-1]);
-					}
-					if((j+1) < numColumns && grid[i][j+1].getInitial() == 'W') {
-						grid[i][j].addAdjacency(grid[i][j+1]);
-					}
-
-					continue;
 				}
 
 				// Making sure it doesn't go outside the grid and adding adjacent walkways
