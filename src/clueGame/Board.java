@@ -178,22 +178,27 @@ public class Board {
 					}
 
 					// Set doorways
-					if(secondChar == '^') {
+					switch(secondChar) {
+					case '^':
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.UP);
 						totalDoorWays.add(grid[i][j]);
-					} else if (secondChar == 'v') {
+						break;
+					case 'v':
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.DOWN);
 						totalDoorWays.add(grid[i][j]);
-					} else if (secondChar == '<') {
+						break;
+					case '<':
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.LEFT);
 						totalDoorWays.add(grid[i][j]);
-					} else if (secondChar == '>') {
+						break;
+					case '>':
 						grid[i][j].setIsDoorway(true);
 						grid[i][j].setDoorDirection(DoorDirection.RIGHT);
 						totalDoorWays.add(grid[i][j]);
+						break;
 					}
 				}
 			}
