@@ -18,6 +18,8 @@ public class Board {
 	private BoardCell[][] grid;
 	private int numRows, numColumns;
 	private String layoutConfigFile, setupConfigFile;
+	private char walkwayChar;
+	private char unusedChar;
 	private List<BoardCell> totalDoorWays;
 	private Map<Character, Room> roomMap;
 	private Set<BoardCell> targets;
@@ -81,6 +83,11 @@ public class Board {
 
 				Room room = new Room(tempList[1]);
 				Character symbol = tempList[2].charAt(0);
+				
+				if(tempList[1].equals("Walkway")) walkwayChar = tempList[2].charAt(0);
+				
+				if(tempList[1].equals("Unused")) unusedChar = tempList[2].charAt(0);
+				
 				roomMap.put(symbol, room);
 			}
 
@@ -140,7 +147,7 @@ public class Board {
 
 
 				if(roomMap.containsKey(initial)) {
-					if(initial != 'W' && initial != 'X') {
+					if(initial != walkwayChar && initial != unusedChar) {
 						grid[i][j].setRoom(true);
 					} else {
 						grid[i][j].setRoom(false);
@@ -231,7 +238,7 @@ public class Board {
 				char initial = grid[i][j].getInitial();
 
 				// Checks if it's a room		
-				if(initial != 'W' && initial != 'X') {
+				if(initial != walkwayChar && initial != unusedChar) {
 					Room room = roomMap.get(initial);
 
 					// Adding door ways to adjacency list of room
@@ -259,22 +266,22 @@ public class Board {
 
 				// Making sure it doesn't go outside the grid and adding adjacent walkways
 				if((i - 1) >= 0) {
-					if(grid[i-1][j].getInitial() == 'W') {
+					if(grid[i-1][j].getInitial() == walkwayChar) {
 						grid[i][j].addAdjacency(grid[i-1][j]);
 					}
 				}
 				if((i+1) < numRows) {
-					if(grid[i+1][j].getInitial() == 'W') {
+					if(grid[i+1][j].getInitial() == walkwayChar) {
 						grid[i][j].addAdjacency(grid[i+1][j]);
 					}
 				}
 				if((j-1) >= 0) {
-					if(grid[i][j-1].getInitial() == 'W') {
+					if(grid[i][j-1].getInitial() == walkwayChar) {
 						grid[i][j].addAdjacency(grid[i][j-1]);
 					}
 				}
 				if((j+1) < numColumns) {
-					if(grid[i][j+1].getInitial() == 'W') {
+					if(grid[i][j+1].getInitial() == walkwayChar) {
 						grid[i][j].addAdjacency(grid[i][j+1]);
 					}
 				}
@@ -360,5 +367,4 @@ public class Board {
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
-
 }
