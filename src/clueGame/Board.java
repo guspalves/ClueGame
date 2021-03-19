@@ -7,6 +7,7 @@
 
 package clueGame;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
@@ -24,6 +25,7 @@ public class Board {
 	private Map<Character, Room> roomMap;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
+	private ArrayList<Player> playerArr;
 	private static Board theInstance = new Board();
 
 	// Board constructor
@@ -42,6 +44,8 @@ public class Board {
 		totalDoorWays = new ArrayList<BoardCell>();
 		targets = new HashSet<BoardCell>();
 		visited = new HashSet<BoardCell>();
+		playerArr = new ArrayList<Player>();
+		
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
@@ -77,18 +81,76 @@ public class Board {
 				String[] tempList = temp.split(", ");
 				String tempString = tempList[0];
 				
-				if(tempString.equals("Room") == false && tempString.equals("Space") == false) { 
+				if(tempString.equals("Room") == false && tempString.equals("Space") == false && tempString.equals("Player") == false) { 
 					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 				}
-
-				Room room = new Room(tempList[1]);
-				Character symbol = tempList[2].charAt(0);
 				
-				if(tempList[1].equals("Walkway")) walkwayChar = tempList[2].charAt(0);
+				// Handles reading in rooms and spaces
+				if(tempString.equals("Room") || tempString.equals("Space")) {
+					if(tempList[1].equals("Walkway")) walkwayChar = tempList[2].charAt(0);
+					if(tempList[1].equals("Unused")) unusedChar = tempList[2].charAt(0);
+					
+					Room room = new Room(tempList[1]);
+					Character symbol = tempList[2].charAt(0);
+					
+					roomMap.put(symbol, room);
+					
+					continue;
+				}
 				
-				if(tempList[1].equals("Unused")) unusedChar = tempList[2].charAt(0);
+				// Handles reading in players
+				if(tempString.equals("Player")) {
+					String name = tempList[1];
+					String colorString = tempList[2];
+					
+					// Initializing color
+					Color color = null;
+					
+					// Switch statement to figure out color
+					switch(colorString) {
+						case "Black":
+							color = Color.black;
+							break;
+						case "Blue":
+							color = Color.blue;
+							break;
+						case "Yellow":
+							color = Color.yellow;
+							break;
+						case "Red":
+							color = Color.red;
+							break;
+						case "Green":
+							color = Color.green;
+							break;
+						case "Pink":
+							color = Color.pink;
+							break;
+						
+						default:
+							color = Color.black;
+							break;
+					}
+					
+					// Figuring out starting location
+					int startRow = Integer.parseInt(tempList[4]);
+					int startCol = Integer.parseInt(tempList[5]);
+					
+					// Creating player
+					if(tempList[3].equals("Human")) {
+						HumanPlayer player = new HumanPlayer(name, color, startRow, startCol);
+						playerArr.add(player);
+					} else {
+						ComputerPlayer player = new ComputerPlayer(name, color, startRow, startCol);
+						playerArr.add(player);
+					}
+					
+					// Going to next iteration
+					continue;
+				}
 				
-				roomMap.put(symbol, room);
+				
+				
 			}
 
 			scan.close();
@@ -376,5 +438,9 @@ public class Board {
 
 	public Set<BoardCell> getTargets() {
 		return targets;
+	}
+
+	public ArrayList<Player> getPlayerArray() {
+		return playerArr;
 	}
 }
