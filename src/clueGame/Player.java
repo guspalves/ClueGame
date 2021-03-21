@@ -1,3 +1,9 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Player Class to store information about each player
+ */
 package clueGame;
 
 import java.awt.*;

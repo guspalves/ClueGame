@@ -1,14 +1,21 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Child class of player for human player
+ */
+
 package clueGame;
 
 import java.awt.Color;
-import java.util.function.BooleanSupplier;
 
 public class HumanPlayer extends Player{
-
+	// Human Player Constructor
 	public HumanPlayer(String name, Color color, int row, int col) {
 		super(name, color, row, col);
 	}
 
+	// HumanPlayer implementation for update card. Adds card to card array
 	@Override
 	public void updateCard(Card card) {
 		super.addCard(card);

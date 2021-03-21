@@ -1,3 +1,7 @@
+/* @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ */
 package clueGame;
 
 public class BadConfigFormatException extends Exception{

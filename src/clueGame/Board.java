@@ -2,7 +2,7 @@
  * @author Gustavo Alves
  * @author Noah Terry
  * 
- * Description: Setting up the TestBoard to run JUnit tests
+ * Description: Setting up the Board for Clue
  */
 
 package clueGame;
@@ -11,8 +11,6 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
-
-import Experiment.TestBoardCell;
 
 public class Board {
 	// Instance variables
@@ -31,6 +29,7 @@ public class Board {
 	private static Board theInstance = new Board();
 	private ArrayList<Card> deck;
 	private Solution theAnswer;
+	private Scanner scan;
 
 	// Board constructor
 	private Board() {
@@ -57,13 +56,10 @@ public class Board {
 			loadSetupConfig();
 			loadLayoutConfig();
 			calculateAdjacency();
-			if(!weaponArr.isEmpty() && !roomArr.isEmpty() && !playerArr.isEmpty()) {
-				deal();
-			} 
+			deal();
+
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
-		} finally {
-			
 		}
 	}
 
@@ -81,7 +77,7 @@ public class Board {
 
 		try {
 			FileReader reader = new FileReader(setupConfigFile);
-			Scanner scan = new Scanner(reader);
+			scan = new Scanner(reader);
 			while(scan.hasNextLine()) {
 				String temp = scan.nextLine();
 
@@ -440,11 +436,13 @@ public class Board {
 		// Use random numbers to create theAnswer
 		ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
 		
+		// Card indices for solution
 		Random random = new Random();
 		int roomCardIndex = random.nextInt(roomArr.size());
 		int personCardIndex = random.nextInt(playerArr.size() - 1) + roomArr.size();
 		int weaponCardIndex = random.nextInt(weaponArr.size() - 2) + playerArr.size() + roomArr.size();
 		
+		// geting cards for solution
 		Card roomCard = deck.get(roomCardIndex);
 		tempDeck.remove(roomCardIndex);
 		Card personCard = deck.get(personCardIndex);
@@ -456,6 +454,7 @@ public class Board {
 		theAnswer = new Solution(personCard, roomCard, weaponCard);
 		
 		int playerIndex = 0;
+		// Deals remaining cards to the players
 		while(!tempDeck.isEmpty()) {
 			int cardDealtIndex = random.nextInt(tempDeck.size());
 			

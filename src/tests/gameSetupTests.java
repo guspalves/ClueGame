@@ -1,11 +1,16 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Setting up the TestBoard to run JUnit tests
+ */
+
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Set;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
