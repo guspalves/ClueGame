@@ -82,7 +82,6 @@ class gameSetupTests {
 	
 	@Test
 	public void testSolutionExists() {
-		board.deal();
 		assertTrue(board.getTheAnswer() != null);
 	}
 	

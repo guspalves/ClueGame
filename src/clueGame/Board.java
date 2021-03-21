@@ -26,6 +26,8 @@ public class Board {
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
 	private ArrayList<Player> playerArr;
+	private ArrayList<Card> weaponArr;
+	private ArrayList<Card> roomArr;
 	private static Board theInstance = new Board();
 	private ArrayList<Card> deck;
 	private Solution theAnswer;
@@ -48,10 +50,15 @@ public class Board {
 		visited = new HashSet<BoardCell>();
 		playerArr = new ArrayList<Player>();
 		deck = new ArrayList<Card>();
+		weaponArr = new ArrayList<Card>();
+		roomArr = new ArrayList<Card>();
 		
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
+			if(!weaponArr.isEmpty() && !roomArr.isEmpty() && !playerArr.isEmpty()) {
+				deal();
+			}
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -100,6 +107,7 @@ public class Board {
 					if(tempString.equals("Room")) {
 						Card roomCard = new Card(tempList[1], CardType.ROOM);
 						deck.add(roomCard);
+						roomArr.add(roomCard);
 					}
 					continue;
 				}
@@ -164,6 +172,7 @@ public class Board {
 					String weaponName = tempList[1];
 					Card weaponCard = new Card(weaponName, CardType.WEAPON);
 					deck.add(weaponCard);
+					weaponArr.add(weaponCard);
 				}
 				
 			}
@@ -422,14 +431,14 @@ public class Board {
 		}
 	}
 
-	public void deal() {
+	public void deal(){
 		// Use random numbers to create theAnswer
 		ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
 		
 		Random random = new Random();
-		int roomCardIndex = random.nextInt(8);
-		int personCardIndex = random.nextInt(14-9) + 9;
-		int weaponCardIndex = random.nextInt(20-15) + 15;
+		int roomCardIndex = random.nextInt(roomArr.size());
+		int personCardIndex = random.nextInt(playerArr.size() - 1) + roomArr.size();
+		int weaponCardIndex = random.nextInt(weaponArr.size() - 2) + playerArr.size() + roomArr.size();
 		
 		Card roomCard = deck.get(roomCardIndex);
 		tempDeck.remove(roomCardIndex);
