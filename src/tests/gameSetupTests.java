@@ -106,7 +106,6 @@ class gameSetupTests {
 		Card weapon = new Card("Revolver", CardType.WEAPON);
 		
 		Solution tmpSolution = new Solution(person, room, weapon);
-		
 		assertTrue(tmpSolution.isSolution(person, room, weapon));
 		
 		Card newPerson = new Card("Smith", CardType.PERSON);
