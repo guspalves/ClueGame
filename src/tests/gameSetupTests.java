@@ -21,7 +21,6 @@ class gameSetupTests {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
-		
 	}
 	
 	@Test
@@ -69,13 +68,49 @@ class gameSetupTests {
 		assertTrue(deck.get(0).getCardName().equals("Kitchen"));
 		assertTrue(deck.get(8).getType().equals(CardType.ROOM));
 		assertTrue(deck.get(8).getCardName().equals("Bedroom"));
+		
 		assertTrue(deck.get(9).getType().equals(CardType.PERSON));
 		assertTrue(deck.get(9).getCardName().equals("Colonel Mustard"));
 		assertTrue(deck.get(14).getType().equals(CardType.PERSON));
 		assertTrue(deck.get(14).getCardName().equals("Miss Scarlet"));
+		
 		assertTrue(deck.get(15).getType().equals(CardType.WEAPON));
 		assertTrue(deck.get(15).getCardName().equals("Revolver"));
 		assertTrue(deck.get(20).getType().equals(CardType.WEAPON));
 		assertTrue(deck.get(20).getCardName().equals("Wrench"));
+	}
+	
+	@Test
+	public void testSolutionExists() {
+		board.deal();
+		assertTrue(board.getTheAnswer() != null);
+	}
+	
+	@Test
+	public void testCardsDealt() {
+		ArrayList<Player> playerArr = board.getPlayerArray();
+		HumanPlayer human = (HumanPlayer) playerArr.get(0);
+		assertEquals(human.getCardArr().size(), 3);
+		
+		ComputerPlayer compPlayer1 = (ComputerPlayer) playerArr.get(5);
+		assertEquals(compPlayer1.getCardArr().size(), 3);
+
+		ComputerPlayer compPlayer2 = (ComputerPlayer) playerArr.get(3);
+		assertEquals(compPlayer2.getCardArr().size(), 3);
+	}
+	
+	@Test
+	public void testSolutionCase() {
+		Card person = new Card("Joe", CardType.PERSON);
+		Card room = new Card("Kitchen", CardType.ROOM);
+		Card weapon = new Card("Revolver", CardType.WEAPON);
+		
+		Solution tmpSolution = new Solution(person, room, weapon);
+		
+		assertTrue(tmpSolution.isSolution(person, room, weapon));
+		
+		Card newPerson = new Card("Smith", CardType.PERSON);
+		assertFalse(tmpSolution.isSolution(newPerson, room, weapon));
+
 	}
 }

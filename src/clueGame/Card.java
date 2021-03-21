@@ -11,7 +11,7 @@ public class Card {
 	}
 	
 	public boolean equals(Card target) {
-		return (this.type == target.type);
+		return (this.type == target.type) && (this.cardName.equals(target.cardName));
 	}
 	
 	public String getCardName() {

@@ -11,7 +11,6 @@ public class HumanPlayer extends Player{
 
 	@Override
 	public void updateCard(Card card) {
-		// TODO Auto-generated method stub
-		
+		super.addCard(card);
 	}
 }

@@ -28,6 +28,7 @@ public class Board {
 	private ArrayList<Player> playerArr;
 	private static Board theInstance = new Board();
 	private ArrayList<Card> deck;
+	private Solution theAnswer;
 
 	// Board constructor
 	private Board() {
@@ -421,11 +422,50 @@ public class Board {
 		}
 	}
 
-
+	public void deal() {
+		// Use random numbers to create theAnswer
+		ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
+		
+		Random random = new Random();
+		int roomCardIndex = random.nextInt(8);
+		int personCardIndex = random.nextInt(14-9) + 9;
+		int weaponCardIndex = random.nextInt(20-15) + 15;
+		
+		Card roomCard = deck.get(roomCardIndex);
+		tempDeck.remove(roomCardIndex);
+		Card personCard = deck.get(personCardIndex);
+		tempDeck.remove(personCardIndex);
+		Card weaponCard = deck.get(weaponCardIndex);
+		tempDeck.remove(weaponCardIndex);
+		
+		// Creating solution
+		theAnswer = new Solution(personCard, roomCard, weaponCard);
+		
+		int playerIndex = 0;
+		while(!tempDeck.isEmpty()) {
+			int cardDealtIndex = random.nextInt(tempDeck.size());
+			
+			Card cardDealt = tempDeck.get(cardDealtIndex);
+			tempDeck.remove(cardDealtIndex);
+			
+			playerArr.get(playerIndex).addCard(cardDealt);
+			
+			playerIndex++;
+			
+			if(playerIndex >= playerArr.size()) {
+				playerIndex = 0;
+			}
+		}
+	}
+	
 	/*
 	 * Getters
 	 */
 	
+	public Solution getTheAnswer() {
+		return theAnswer;
+	}
+
 	public Room getRoom(char c) {
 		return roomMap.get(c);
 	}
