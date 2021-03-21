@@ -20,3 +20,11 @@ Player, Professor Plum, Pink, Computer, 17, 1
 Player, Mrs. Peacock, Blue, Computer, 23, 5
 Player, Mrs. White, Black, Computer, 23, 17
 Player, Miss Scarlet, Red, Computer, 13, 21
+
+// Weapon List
+Weapon, Revolver
+Weapon, Dagger
+Weapon, Rope
+Weapon, Lead Pipe
+Weapon, Candlestick
+Weapon, Wrench

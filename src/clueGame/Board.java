@@ -27,6 +27,7 @@ public class Board {
 	private Set<BoardCell> visited;
 	private ArrayList<Player> playerArr;
 	private static Board theInstance = new Board();
+	private ArrayList<Card> deck;
 
 	// Board constructor
 	private Board() {
@@ -45,6 +46,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		visited = new HashSet<BoardCell>();
 		playerArr = new ArrayList<Player>();
+		deck = new ArrayList<Card>();
 		
 		try {
 			loadSetupConfig();
@@ -81,7 +83,7 @@ public class Board {
 				String[] tempList = temp.split(", ");
 				String tempString = tempList[0];
 				
-				if(tempString.equals("Room") == false && tempString.equals("Space") == false && tempString.equals("Player") == false) { 
+				if(!tempString.equals("Room") && !tempString.equals("Space") && !tempString.equals("Player") && !tempString.equals("Weapon")) { 
 					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 				}
 				
@@ -94,7 +96,10 @@ public class Board {
 					Character symbol = tempList[2].charAt(0);
 					
 					roomMap.put(symbol, room);
-					
+					if(tempString.equals("Room")) {
+						Card roomCard = new Card(tempList[1], CardType.ROOM);
+						deck.add(roomCard);
+					}
 					continue;
 				}
 				
@@ -128,8 +133,7 @@ public class Board {
 							break;
 						
 						default:
-							color = Color.black;
-							break;
+							throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 					}
 					
 					// Figuring out starting location
@@ -140,16 +144,26 @@ public class Board {
 					if(tempList[3].equals("Human")) {
 						HumanPlayer player = new HumanPlayer(name, color, startRow, startCol);
 						playerArr.add(player);
-					} else {
+						Card playerCard = new Card(name, CardType.PERSON);
+						deck.add(playerCard);
+					} else if(tempList[3].equals("Computer"))  {
 						ComputerPlayer player = new ComputerPlayer(name, color, startRow, startCol);
 						playerArr.add(player);
+						Card playerCard = new Card(name, CardType.PERSON);
+						deck.add(playerCard);
+					} else {
+						throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 					}
 					
 					// Going to next iteration
 					continue;
 				}
 				
-				
+				if(tempString.equals("Weapon")) {
+					String weaponName = tempList[1];
+					Card weaponCard = new Card(weaponName, CardType.WEAPON);
+					deck.add(weaponCard);
+				}
 				
 			}
 
@@ -440,6 +454,10 @@ public class Board {
 		return targets;
 	}
 
+	public ArrayList<Card> getDeck() {
+		return deck;
+	}
+	
 	public ArrayList<Player> getPlayerArray() {
 		return playerArr;
 	}
