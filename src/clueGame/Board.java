@@ -56,13 +56,14 @@ public class Board {
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
+			calculateAdjacency();
 			if(!weaponArr.isEmpty() && !roomArr.isEmpty() && !playerArr.isEmpty()) {
 				deal();
-			}
+			} 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
 		} finally {
-			calculateAdjacency();
+			
 		}
 	}
 
@@ -173,6 +174,7 @@ public class Board {
 					Card weaponCard = new Card(weaponName, CardType.WEAPON);
 					deck.add(weaponCard);
 					weaponArr.add(weaponCard);
+					continue;
 				}
 				
 			}
@@ -431,7 +433,10 @@ public class Board {
 		}
 	}
 
-	public void deal(){
+	public void deal() throws BadConfigFormatException{
+		if(weaponArr.isEmpty() || roomArr.isEmpty() || playerArr.isEmpty()) {
+			throw new BadConfigFormatException("Full deck not provided");
+		}
 		// Use random numbers to create theAnswer
 		ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
 		
