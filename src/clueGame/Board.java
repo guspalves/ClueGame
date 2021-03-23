@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
+import java.util.function.BooleanSupplier;
 
 public class Board {
 	// Instance variables
@@ -407,7 +408,6 @@ public class Board {
 				if(roomMap.get(adjCell.getInitial()).getCenterCell() == adjCell && !visited.contains(adjCell)) {
 					targets.add(adjCell);
 				}
-
 				continue;
 			}
 
@@ -461,7 +461,7 @@ public class Board {
 			Card cardDealt = tempDeck.get(cardDealtIndex);
 			tempDeck.remove(cardDealtIndex);
 			
-			playerArr.get(playerIndex).addCard(cardDealt);
+			playerArr.get(playerIndex).updateCard(cardDealt);
 			
 			playerIndex++;
 			
@@ -469,6 +469,14 @@ public class Board {
 				playerIndex = 0;
 			}
 		}
+	}
+	
+	public void setAnswer(Card person, Card room, Card weapon) {
+		theAnswer = new Solution(person, room, weapon);	
+	}
+	
+	public boolean checkAccusation(Solution solution) {
+		return theAnswer.isSolution(solution);
 	}
 	
 	/*

@@ -15,9 +15,4 @@ public class HumanPlayer extends Player{
 		super(name, color, row, col);
 	}
 
-	// HumanPlayer implementation for update card. Adds card to card array
-	@Override
-	public void updateCard(Card card) {
-		super.addCard(card);
-	}
 }

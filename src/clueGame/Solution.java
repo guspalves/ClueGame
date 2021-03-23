@@ -12,7 +12,7 @@ public class Solution {
 		this.weapon = weapon;
 	}
 	
-	public boolean isSolution(Card person, Card room, Card weapon) {
-		return (this.person.equals(person)) && (this.room.equals(room)) && (this.weapon.equals(weapon));
+	public boolean isSolution(Solution s) {
+		return (this.person.equals(s.person)) && (this.room.equals(s.room)) && (this.weapon.equals(s.weapon));
 	}
 }

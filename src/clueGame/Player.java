@@ -28,11 +28,16 @@ public abstract class Player {
 		cardArr = new ArrayList<Card>();
 	}
 	
-	public abstract void updateCard(Card card);
-	
-	// Adding card to ArrayList
-	public void addCard(Card card) {
+	public void updateCard(Card card) {
 		cardArr.add(card);
+	}
+	
+	public void updateHand(Card card) {
+		
+	}
+	
+	public void updateSeen(Card seenCard) {
+		
 	}
 	
 	/*

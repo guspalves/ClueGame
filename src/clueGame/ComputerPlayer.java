@@ -14,10 +14,4 @@ public class ComputerPlayer extends Player {
 	public ComputerPlayer(String name, Color color, int row, int col) {
 		super(name, color, row, col);
 	}
-	
-	// ComputerPlayer implementation for update card. Adds card to card array
-	@Override
-	public void updateCard(Card card) {
-		super.addCard(card);		
-	}
 }
