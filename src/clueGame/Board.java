@@ -479,6 +479,11 @@ public class Board {
 		return theAnswer.isSolution(solution);
 	}
 	
+	public Card handleSuggestion(Solution suggestion) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/*
 	 * Getters
 	 */

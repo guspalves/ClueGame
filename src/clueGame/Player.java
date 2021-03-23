@@ -8,6 +8,7 @@ package clueGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Player {
 	private String name;
@@ -38,6 +39,44 @@ public abstract class Player {
 	
 	public void updateSeen(Card seenCard) {
 		
+	}
+	
+	public Card disproveSuggestion(Solution suggestion) {
+		// Getting cards
+		Card person = suggestion.getPerson();
+		Card room = suggestion.getRoom();
+		Card weapon = suggestion.getWeapon();
+		
+		// Array to store index of same values
+		ArrayList<Integer> sameArr = new ArrayList<Integer>();
+		
+		// Finding which indexes of cards match
+		for(int i = 0; i < cardArr.size(); i++) {
+			if(cardArr.get(i).equals(person)) {
+				sameArr.add(i);
+			}
+			
+			if(cardArr.get(i).equals(room)) {
+				sameArr.add(i);
+			}
+			
+			if(cardArr.get(i).equals(weapon)) {
+				sameArr.add(i);
+			}
+		}
+		
+		// Returning either correct or random correct card
+		if(sameArr.size() == 1) {
+			return cardArr.get(sameArr.get(0));
+		} else if (sameArr.size() > 1) {
+			Random rand = new Random();
+			int index = rand.nextInt(sameArr.size());
+			return cardArr.get(sameArr.get(index));
+			
+		}
+		
+		// Return null if no way to disprove is found
+		return null;
 	}
 	
 	/*

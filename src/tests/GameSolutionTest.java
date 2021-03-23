@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Color;
+
 import org.junit.jupiter.api.BeforeAll;
 
 import clueGame.*;
@@ -62,7 +64,28 @@ class GameSolutionTest {
 	
 	@Test
 	public void TestDisproveSuggestion() {
+		Solution testSuggestion = new Solution(mustardCard, gymCard, revolverCard);
+		Player tempPlayer = new ComputerPlayer("Joe Smith", Color.red, 1, 9);
 		
+		tempPlayer.updateCard(plumCard);
+		// Seeing if disproveSuggestion returns null for no matching card
+		assertEquals(tempPlayer.disproveSuggestion(testSuggestion), null);
+		
+		// Seeing if disproveSuggestion returns card with 1 matching card
+		tempPlayer.updateCard(gymCard);
+		assertEquals(tempPlayer.disproveSuggestion(testSuggestion), gymCard);
+		
+		// Seeing if disproveSuggestion returns random card with >1 matching card
+		tempPlayer.updateCard(revolverCard);
+		for(int i = 0; i < 5; i++) {
+			Card tmp = tempPlayer.disproveSuggestion(testSuggestion);
+			if(tmp.equals(gymCard) || tmp.equals(revolverCard)) {
+				assertTrue(true);
+			} else {
+				System.out.println(tmp.getCardName());
+				assertTrue(false);
+			}
+		}
 	}
 	
 	@Test
