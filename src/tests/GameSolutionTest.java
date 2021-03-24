@@ -3,6 +3,7 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 
@@ -89,7 +90,50 @@ class GameSolutionTest {
 	}
 	
 	@Test
-	public void TestHandleSolution() {
+	public void TestHandleSuggestion() {
+		Solution testSuggestion = new Solution(greenCard, kitchenCard, candleCard);
+		Player human = new HumanPlayer("Joe Smith", Color.black, 4, 1);
+		Player computer1 = new ComputerPlayer("Jim Jhonson", Color.green, 1, 9);
+		Player computer2 = new ComputerPlayer("Joe Williams", Color.yellow, 4, 21);
+		Player computer3 = new ComputerPlayer("Sam Miller", Color.red, 11, 1);
+		
+		human.updateCard(greenhouseCard);
+		human.updateCard(daggerCard);		
+		
+		computer1.updateCard(wrenchCard);
+		computer1.updateCard(plumCard);
+		
+		computer2.updateCard(whiteCard);
+		computer2.updateCard(kitchenCard);
+		
+		computer3.updateCard(peacockCard);
+		computer3.updateCard(theaterCard);
+		
+		// testing with disputes
+		ArrayList<Player> playerArr1 = new ArrayList<Player>();
+		
+		playerArr1.add(human);
+		playerArr1.add(computer1);
+		playerArr1.add(computer2);
+		playerArr1.add(computer3);
+		
+		board.setPlayerArr(playerArr1);
+		
+		assertEquals(board.handleSuggestion(testSuggestion), kitchenCard);
+		
+		// Testing with no disputes
+		ArrayList<Player> playerArr2 = new ArrayList<Player>();
+		playerArr2.add(human);
+		playerArr2.add(computer1);
+		playerArr2.add(computer3);
+		
+		board.setPlayerArr(playerArr2);
+		assertEquals(board.handleSuggestion(testSuggestion), null);
+		
+		// Testing that first player that can dispute is the one that disputes
+		human.updateCard(greenCard);
+		board.setPlayerArr(playerArr1);
+		assertEquals(board.handleSuggestion(testSuggestion), greenCard);
 		
 	}
 }

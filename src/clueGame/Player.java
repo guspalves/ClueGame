@@ -72,7 +72,6 @@ public abstract class Player {
 			Random rand = new Random();
 			int index = rand.nextInt(sameArr.size());
 			return cardArr.get(sameArr.get(index));
-			
 		}
 		
 		// Return null if no way to disprove is found

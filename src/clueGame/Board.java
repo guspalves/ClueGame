@@ -480,8 +480,17 @@ public class Board {
 	}
 	
 	public Card handleSuggestion(Solution suggestion) {
-		// TODO Auto-generated method stub
+		for(Player p : playerArr) {
+			if(p.disproveSuggestion(suggestion) != null){
+				return p.disproveSuggestion(suggestion);
+			}
+		}
 		return null;
+	}
+	
+	// Method for testing
+	public void setPlayerArr(ArrayList<Player> players) {
+		playerArr = players;
 	}
 	
 	/*
@@ -527,4 +536,6 @@ public class Board {
 	public ArrayList<Player> getPlayerArray() {
 		return playerArr;
 	}
+
+	
 }
