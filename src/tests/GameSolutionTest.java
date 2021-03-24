@@ -1,3 +1,10 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Creating tests for the Accusations/Suggestions.
+ */
+
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;

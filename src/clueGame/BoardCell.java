@@ -15,9 +15,11 @@ public class BoardCell {
 	private char initial;
 	private DoorDirection doorDirection;
 	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway, isOccupied;
+	private String roomName;
 	private char secretPassage;
 	private char entryToRoom;
 	Set<BoardCell> adjList;
+	private Card roomCard;
 	
 	// Constructors
 	public BoardCell(){
@@ -89,6 +91,19 @@ public class BoardCell {
 		return entryToRoom;
 	}
 	
+
+	public String getRoomName() {
+		return roomName;
+	}
+	
+	public boolean isSecretPassage() {
+		return isSecretPassage;
+	}
+	
+	public Card getRoomCard() {
+		return roomCard;
+	}
+	
 	/*
 	 * Setters
 	 */
@@ -113,10 +128,6 @@ public class BoardCell {
 		this.isRoom = isRoom;
 	}
 
-	public boolean isSecretPassage() {
-		return isSecretPassage;
-	}
-
 	public void setIsSecretPassage(boolean isSecretPassage) {
 		this.isSecretPassage = isSecretPassage;
 	}
@@ -133,6 +144,12 @@ public class BoardCell {
 		this.entryToRoom = entryToRoom;
 	}
 
-	
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+
+	public void setRoomCard(Card roomCard) {
+		this.roomCard = roomCard;
+	}
 }
 

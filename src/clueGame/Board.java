@@ -106,6 +106,7 @@ public class Board {
 						Card roomCard = new Card(tempList[1], CardType.ROOM);
 						deck.add(roomCard);
 						roomArr.add(roomCard);
+						room.setRoomCard(roomCard);
 					}
 					continue;
 				}
@@ -234,6 +235,8 @@ public class Board {
 				if(roomMap.containsKey(initial)) {
 					if(initial != walkwayChar && initial != unusedChar) {
 						grid[i][j].setRoom(true);
+						grid[i][j].setRoomName(roomMap.get(initial).getRoomName());
+						grid[i][j].setRoomCard(roomMap.get(initial).getRoomCard());
 					} else {
 						grid[i][j].setRoom(false);
 					}
@@ -536,6 +539,4 @@ public class Board {
 	public ArrayList<Player> getPlayerArray() {
 		return playerArr;
 	}
-
-	
 }

@@ -17,8 +17,7 @@ public class Room {
 	private boolean hasSecretpassage;
 	private BoardCell secretPassage;
 	private ArrayList<BoardCell> doorWays;
-	
-	
+	private Card roomCard;
 
 	// Room default constructor
 	public Room(String name) {
@@ -50,6 +49,14 @@ public class Room {
 		return secretPassage;
 	}
 	
+	public Card getRoomCard() {
+		return roomCard;
+	}
+	
+	public ArrayList<BoardCell> getDoorWays() {
+		return doorWays;
+	}
+	
 	/*
 	 * Setters
 	 */
@@ -69,13 +76,13 @@ public class Room {
 	public void setHasSecretpassage(boolean hasSecretpassage) {
 		this.hasSecretpassage = hasSecretpassage;
 	}
-	
-	public ArrayList<BoardCell> getDoorWays() {
-		return doorWays;
-	}
 
 	// Adding doorWay to ArrayList of Doorways
 	public void addDoorway(BoardCell doorWay) {
 		doorWays.add(doorWay);
+	}
+	
+	public void setRoomCard(Card roomCard) {
+		this.roomCard = roomCard;
 	}
 }
