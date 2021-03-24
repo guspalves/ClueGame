@@ -75,10 +75,15 @@ public class ComputerPlayer extends Player {
 			}
 		}
 		
-		// Choosing a random piece to move to
+		// Choosing a random piece to move to and ensuring it's not a room
 		Random rand = new Random();
-		fin = possibleTargets.get(rand.nextInt(possibleTargets.size()));
+		int cellIndex = rand.nextInt(possibleTargets.size());
+		while(possibleTargets.get(cellIndex).isRoom() == true) {
+			cellIndex = rand.nextInt(possibleTargets.size());
+		}
 		
+		fin = possibleTargets.get(cellIndex);
+
 		// Checking if piece should be a room instead
 		if(roomIndex.size() >= 1) {
 			for(int i = 0; i < roomIndex.size(); i++) {
