@@ -8,7 +8,9 @@ package clueGame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Player {
 	private String name;
@@ -17,7 +19,10 @@ public abstract class Player {
 	protected int row;
 	protected int col;
 	
-	private ArrayList<Card> cardArr;
+	protected Set<Card> seen;
+	
+	protected ArrayList<Card> cardArr;
+	protected ArrayList<Card> deck;
 	
 	// Constructor
 	public Player(String name, Color color, int row, int col) {
@@ -27,18 +32,16 @@ public abstract class Player {
 		this.row = row;
 		this.col = col;
 		cardArr = new ArrayList<Card>();
-	}
-	
-	public void updateCard(Card card) {
-		cardArr.add(card);
+		seen = new HashSet<Card>();
+		deck = new ArrayList<Card>();
 	}
 	
 	public void updateHand(Card card) {
-		
+		cardArr.add(card);
 	}
 	
 	public void updateSeen(Card seenCard) {
-		
+		seen.add(seenCard);
 	}
 	
 	public Card disproveSuggestion(Solution suggestion) {
@@ -76,6 +79,10 @@ public abstract class Player {
 		
 		// Return null if no way to disprove is found
 		return null;
+	}
+	
+	public void setDeck(ArrayList<Card> deck) {
+		this.deck = deck;
 	}
 	
 	/*

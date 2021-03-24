@@ -68,16 +68,16 @@ class GameSolutionTest {
 		Solution testSuggestion = new Solution(mustardCard, gymCard, revolverCard);
 		Player tempPlayer = new ComputerPlayer("Joe Smith", Color.red, 1, 9);
 		
-		tempPlayer.updateCard(plumCard);
+		tempPlayer.updateHand(plumCard);
 		// Seeing if disproveSuggestion returns null for no matching card
 		assertEquals(tempPlayer.disproveSuggestion(testSuggestion), null);
 		
 		// Seeing if disproveSuggestion returns card with 1 matching card
-		tempPlayer.updateCard(gymCard);
+		tempPlayer.updateHand(gymCard);
 		assertEquals(tempPlayer.disproveSuggestion(testSuggestion), gymCard);
 		
 		// Seeing if disproveSuggestion returns random card with >1 matching card
-		tempPlayer.updateCard(revolverCard);
+		tempPlayer.updateHand(revolverCard);
 		for(int i = 0; i < 5; i++) {
 			Card tmp = tempPlayer.disproveSuggestion(testSuggestion);
 			if(tmp.equals(gymCard) || tmp.equals(revolverCard)) {
@@ -97,17 +97,17 @@ class GameSolutionTest {
 		Player computer2 = new ComputerPlayer("Joe Williams", Color.yellow, 4, 21);
 		Player computer3 = new ComputerPlayer("Sam Miller", Color.red, 11, 1);
 		
-		human.updateCard(greenhouseCard);
-		human.updateCard(daggerCard);		
+		human.updateHand(greenhouseCard);
+		human.updateHand(daggerCard);		
 		
-		computer1.updateCard(wrenchCard);
-		computer1.updateCard(plumCard);
+		computer1.updateHand(wrenchCard);
+		computer1.updateHand(plumCard);
 		
-		computer2.updateCard(whiteCard);
-		computer2.updateCard(kitchenCard);
+		computer2.updateHand(whiteCard);
+		computer2.updateHand(kitchenCard);
 		
-		computer3.updateCard(peacockCard);
-		computer3.updateCard(theaterCard);
+		computer3.updateHand(peacockCard);
+		computer3.updateHand(theaterCard);
 		
 		// testing with disputes
 		ArrayList<Player> playerArr1 = new ArrayList<Player>();
@@ -131,9 +131,8 @@ class GameSolutionTest {
 		assertEquals(board.handleSuggestion(testSuggestion), null);
 		
 		// Testing that first player that can dispute is the one that disputes
-		human.updateCard(greenCard);
+		human.updateHand(greenCard);
 		board.setPlayerArr(playerArr1);
 		assertEquals(board.handleSuggestion(testSuggestion), greenCard);
-		
 	}
 }

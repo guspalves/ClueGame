@@ -461,7 +461,7 @@ public class Board {
 			Card cardDealt = tempDeck.get(cardDealtIndex);
 			tempDeck.remove(cardDealtIndex);
 			
-			playerArr.get(playerIndex).updateCard(cardDealt);
+			playerArr.get(playerIndex).updateHand(cardDealt);
 			
 			playerIndex++;
 			
