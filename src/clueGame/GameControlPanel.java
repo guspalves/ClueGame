@@ -1,6 +1,9 @@
 package clueGame;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
 import java.awt.*;
 
 public class GameControlPanel extends JPanel{
@@ -14,44 +17,73 @@ public class GameControlPanel extends JPanel{
 		setLayout(new GridLayout(2,0));
 		JPanel panel = createFirstPanel();
 		add(panel);
+		
+		panel = createSecondPanel();
+		add(panel);
 	}
 
+	
 	private JPanel createFirstPanel() {
 		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1,3));
 		JPanel tempPanel = createTurnPanel();
 		panel.add(tempPanel);
-		
 		
 		tempPanel = createRollPanel();
 		panel.add(tempPanel);
 		
-		tempPanel = createButtonPanel();
-		panel.add(tempPanel);
-		
-		return panel;
-	}
-	
-	private JPanel createButtonPanel() {
 		JButton accusationButton = new JButton("Make Accusation");
 		JButton nextButton = new JButton("NEXT!");
-		JPanel panel = new JPanel();
 		panel.add(accusationButton);
 		panel.add(nextButton);
 		
 		return panel;
 	}
+	
+	private JPanel createSecondPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0,2));
+		JPanel tempPanel = createGuessPanel();
+		panel.add(tempPanel);
+		
+		tempPanel = createGuessResultPanel();
+		panel.add(tempPanel);
+		
+		return panel;
+	}
+	
+	private JPanel createGuessPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 0));
+		JTextField guessValue = new JTextField(guess);
+		guessValue.setEditable(false);
+		panel.add(guessValue);
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
+		return panel;
+	}
+
+	private JPanel createGuessResultPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 0));
+		JTextField guessValue = new JTextField(guessResult);
+		guessValue.setEditable(false);
+		panel.add(guessValue);
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result"));
+		return panel;
+	}
 
 	private JPanel createRollPanel() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 2));
+		//panel.setLayout(new GridLayout(1, 2));
 		JLabel rollLabel = new JLabel("Roll:");
 		panel.add(rollLabel);
-		JTextField rollValue = new JTextField(roll);
+		JTextField rollValue = new JTextField(String.valueOf(roll), 5);
+		rollValue.setEditable(false);
 		panel.add(rollValue);
 		
 		return panel;
 	}
-
+	
 	private JPanel createTurnPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 1));
