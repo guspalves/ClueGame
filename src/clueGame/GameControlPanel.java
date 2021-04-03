@@ -1,3 +1,10 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Setting up the GUI for the Game Control Panel
+ */
+
 package clueGame;
 
 import javax.swing.*;
@@ -7,31 +14,41 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class GameControlPanel extends JPanel{
-	private String playerName;
-	private int roll;
-	private String guess;
-	private String guessResult;
-	
+	// Instance Variables for JTextFields
+	private JTextField rollValue;
+	private JTextField playerName;
+	private JTextField guessValue;
+	private JTextField guessResultPanel;
+
+	// Constructor
 	public GameControlPanel() {
 		// Create a layout with 2 rows
 		setLayout(new GridLayout(2,0));
+		
+		// Creating first panel and adding it to main panel
 		JPanel panel = createFirstPanel();
 		add(panel);
 		
+		// Creating second panel and adding it to main panel
 		panel = createSecondPanel();
 		add(panel);
 	}
 
 	
 	private JPanel createFirstPanel() {
+		// Setting up the panel
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1,3));
+		panel.setLayout(new GridLayout(1,4));
+		
+		// Creating the turn portion of the panel
 		JPanel tempPanel = createTurnPanel();
 		panel.add(tempPanel);
 		
+		// Creating the roll portion of the panel
 		tempPanel = createRollPanel();
 		panel.add(tempPanel);
 		
+		// Creating buttons
 		JButton accusationButton = new JButton("Make Accusation");
 		JButton nextButton = new JButton("NEXT!");
 		panel.add(accusationButton);
@@ -40,44 +57,11 @@ public class GameControlPanel extends JPanel{
 		return panel;
 	}
 	
-	private JPanel createSecondPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0,2));
-		JPanel tempPanel = createGuessPanel();
-		panel.add(tempPanel);
-		
-		tempPanel = createGuessResultPanel();
-		panel.add(tempPanel);
-		
-		return panel;
-	}
-	
-	private JPanel createGuessPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 0));
-		JTextField guessValue = new JTextField(guess);
-		guessValue.setEditable(false);
-		panel.add(guessValue);
-		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
-		return panel;
-	}
-
-	private JPanel createGuessResultPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1, 0));
-		JTextField guessValue = new JTextField(guessResult);
-		guessValue.setEditable(false);
-		panel.add(guessValue);
-		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result"));
-		return panel;
-	}
-
 	private JPanel createRollPanel() {
 		JPanel panel = new JPanel();
-		//panel.setLayout(new GridLayout(1, 2));
 		JLabel rollLabel = new JLabel("Roll:");
 		panel.add(rollLabel);
-		JTextField rollValue = new JTextField(String.valueOf(roll), 5);
+		rollValue = new JTextField(5);
 		rollValue.setEditable(false);
 		panel.add(rollValue);
 		
@@ -90,29 +74,66 @@ public class GameControlPanel extends JPanel{
 		
 		// Printing out the label
 		JLabel nameLabel = new JLabel("Whose turn?");
+		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		panel.add(nameLabel);
 		
 		// Create textfield
-		JTextField name = new JTextField(playerName);
-		name.setEditable(false);
-		panel.add(name);
+		playerName = new JTextField();
+		playerName.setEditable(false);
+		panel.add(playerName);
 		
 		return panel;
 	}
 	
+	private JPanel createSecondPanel() {
+		// Setting up panel
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(0,2));
+		
+		// Creating guess field
+		JPanel tempPanel = createGuessPanel();
+		panel.add(tempPanel);
+		
+		// Creating guess result field
+		tempPanel = createGuessResultPanel();
+		panel.add(tempPanel);
+		
+		return panel;
+	}
 	
+	private JPanel createGuessPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 0));
+		guessValue = new JTextField();
+		guessValue.setEditable(false);
+		panel.add(guessValue);
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
+		return panel;
+	}
+
+	private JPanel createGuessResultPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(1, 0));
+		guessResultPanel = new JTextField();
+		guessResultPanel.setEditable(false);
+		panel.add(guessResultPanel);
+		panel.setBorder(new TitledBorder(new EtchedBorder(), "Guess Result"));
+		return panel;
+	}
 	
-	public void setTurn(ComputerPlayer computerPlayer, int roll) {
-		playerName = computerPlayer.getName();
-		this.roll = roll;
+	// Methods to update data on panel
+	public void setTurn(Player player, int roll) {
+		playerName.setText(player.getName());
+		playerName.setBackground(player.getColor());
+		rollValue.setText(String.valueOf(roll));
 	}
 	
 	private void setGuessResult(String guessResult) {
-		this.guessResult = guessResult;
+		guessResultPanel.setText(guessResult);
 	}
 
 	public void setGuess(String guess) {
-		this.guess = guess;
+		guessValue.setText(guess);
 	}
 	
 	public static void main(String[] args) {
