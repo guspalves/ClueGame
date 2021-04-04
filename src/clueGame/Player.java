@@ -20,7 +20,7 @@ public abstract class Player {
 	protected int col;
 	
 	protected Set<Card> seen;
-	
+
 	protected ArrayList<Card> cardArr;
 	protected ArrayList<Card> deck;
 	
@@ -106,6 +106,10 @@ public abstract class Player {
 
 	public ArrayList<Card> getCardArr(){
 		return cardArr;
+	}
+	
+	public Set<Card> getSeen() {
+		return seen;
 	}
 	
 }
