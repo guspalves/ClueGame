@@ -8,12 +8,14 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import javax.swing.*;
 
-public class Board {
+public class Board extends JPanel {
 	// Instance variables
 	private BoardCell[][] grid;
 	private int numRows, numColumns;
@@ -494,6 +496,39 @@ public class Board {
 	// Method for testing
 	public void setPlayerArr(ArrayList<Player> players) {
 		playerArr = players;
+	}
+	
+	/*
+	 * GUI Functions
+	 */
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		int x = 0;
+		int y = 0;
+		
+		int width = getWidth() / numColumns;
+		int height = getHeight() / numRows;
+		
+		for(int i = 0; i < numRows; i++) {
+			for(int j = 0; j < numColumns; j++) {
+				char initial = grid[i][j].getInitial();
+				
+				if(initial == walkwayChar) {
+					grid[i][j].draw(g, new Color(221,189,77), Color.black, x, y, width, height);
+					x = x + width;
+				} else if(initial == unusedChar) {
+					grid[i][j].draw(g, Color.black, Color.black, x, y, width, height);
+					x = x + width;
+				} else {
+					grid[i][j].draw(g, Color.LIGHT_GRAY, Color.LIGHT_GRAY, x, y, width, height);
+					x = x + width;
+				}
+			}
+			x = 0;
+			y = y + height;
+		}
 	}
 	
 	/*

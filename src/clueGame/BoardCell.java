@@ -7,6 +7,8 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.*;
 
 public class BoardCell {
@@ -39,6 +41,14 @@ public class BoardCell {
 		adjList.add(cell);
 	}
 	
+	// Draw function
+	public void draw(Graphics g, Color color, Color lineColor, int x, int y, int width, int height) {
+		g.setColor(color);
+		g.fillRect(x, y, width, height);
+		
+		g.setColor(lineColor);
+		g.drawRect(x, y, width-1, height-1);
+	}
 	/*
 	 * Getters
 	 */
