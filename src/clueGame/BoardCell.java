@@ -50,6 +50,7 @@ public class BoardCell {
 		g.drawRect(x, y, width-1, height-1);
 	}
 	
+	// Draw function for doors
 	public void drawDoor(Graphics g, int x, int y, int dx, int dy) {
 		g.setColor(Color.blue);
 		g.fillRect(x,y,dx,dy);

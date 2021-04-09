@@ -508,24 +508,32 @@ public class Board extends JPanel {
 		int x = 0;
 		int y = 0;
 		
+		// find width and height of cells
 		int width = getWidth() / numColumns;
 		int height = getHeight() / numRows;
 		
+		// iterate over game board
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
 				char initial = grid[i][j].getInitial();
 				
+				// draw the walkway cells tan
 				if(initial == walkwayChar) {
 					grid[i][j].draw(g, new Color(221,189,77), Color.black, x, y, width, height);
 					x = x + width;
+				
+				// draw unused cells black
 				} else if(initial == unusedChar) {
 					grid[i][j].draw(g, Color.black, Color.black, x, y, width, height);
 					x = x + width;
+				
+				// draw room cells gray
 				} else {
 					grid[i][j].draw(g, Color.LIGHT_GRAY, Color.LIGHT_GRAY, x, y, width, height);
 					x = x + width;
 				}
 				
+				// Draw doorways
 				if(grid[i][j].isDoorway()) {
 					switch(grid[i][j].getDoorDirection()) {
 					case UP:
@@ -548,10 +556,12 @@ public class Board extends JPanel {
 			y = y + height;
 		}
 		
+		// Draw players
 		for(Player player : playerArr) {
 			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
 		}
 		
+		// Draw room names over the rooms
 		for(Map.Entry<Character, Room> entry : roomMap.entrySet()) {
 			// Creating temporary room from roomMap
 			Room temp = roomMap.get(entry.getKey());
