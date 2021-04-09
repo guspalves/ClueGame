@@ -1,4 +1,4 @@
- /**
+/**
  * @author Gustavo Alves
  * @author Noah Terry
  * 
@@ -7,6 +7,9 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Room {
@@ -26,6 +29,12 @@ public class Room {
 		doorWays = new ArrayList<BoardCell>();
 	}
 
+	// Draw Room Name
+	public void draw(Graphics g, int x, int y, int width) {
+		Font font = new Font("Serif", Font.PLAIN, width);
+		g.setFont(font);
+		g.drawString(this.name, x, y);
+	}
 	/*
 	 * Getters
 	 */
@@ -40,27 +49,27 @@ public class Room {
 	public BoardCell getCenterCell() {
 		return centerCell;
 	}
-	
+
 	public boolean isHasSecretpassage() {
 		return hasSecretpassage;
 	}
-	
+
 	public BoardCell getPassage() {
 		return secretPassage;
 	}
-	
+
 	public Card getRoomCard() {
 		return roomCard;
 	}
-	
+
 	public ArrayList<BoardCell> getDoorWays() {
 		return doorWays;
 	}
-	
+
 	/*
 	 * Setters
 	 */
-	
+
 	public void setSecretPassage(BoardCell secretPassage) {
 		this.secretPassage = secretPassage;
 	}
@@ -81,7 +90,7 @@ public class Room {
 	public void addDoorway(BoardCell doorWay) {
 		doorWays.add(doorWay);
 	}
-	
+
 	public void setRoomCard(Card roomCard) {
 		this.roomCard = roomCard;
 	}

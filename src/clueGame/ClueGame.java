@@ -24,6 +24,7 @@ public class ClueGame extends JFrame {
 	
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
+		game.setTitle("Clue");
 		game.setVisible(true);
 	}
 }

@@ -525,10 +525,21 @@ public class Board extends JPanel {
 					grid[i][j].draw(g, Color.LIGHT_GRAY, Color.LIGHT_GRAY, x, y, width, height);
 					x = x + width;
 				}
+				
+				for(Player player : playerArr) {
+					if (player.getRow() == i && player.getCol() == j) {
+						player.draw(g, x - width + 2, y + 2, width - 4, height - 4);
+					}
+				}
 			}
 			x = 0;
 			y = y + height;
 		}
+		
+//		for(Room r : roomMap) {
+//			r.draw(g, x, y, width);
+//		}
+		
 	}
 	
 	/*
