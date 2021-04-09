@@ -49,6 +49,11 @@ public class BoardCell {
 		g.setColor(lineColor);
 		g.drawRect(x, y, width-1, height-1);
 	}
+	
+	public void drawDoor(Graphics g, int x, int y, int dx, int dy) {
+		g.setColor(Color.blue);
+		g.fillRect(x,y,dx,dy);
+	}
 	/*
 	 * Getters
 	 */

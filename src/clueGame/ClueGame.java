@@ -10,7 +10,7 @@ public class ClueGame extends JFrame {
 	Board board;
 	
 	public ClueGame(){
-		setSize(800,1000);
+		setSize(1000,1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		board = Board.getInstance();
@@ -24,7 +24,6 @@ public class ClueGame extends JFrame {
 	
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
-		game.setTitle("Clue");
 		game.setVisible(true);
 	}
 }

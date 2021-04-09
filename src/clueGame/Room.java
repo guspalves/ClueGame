@@ -30,9 +30,11 @@ public class Room {
 	}
 
 	// Draw Room Name
-	public void draw(Graphics g, int x, int y, int width) {
-		Font font = new Font("Serif", Font.PLAIN, width);
+	public void draw(Graphics g, int x, int y) {
+		Font font = new Font("Serif", Font.BOLD, 14);
 		g.setFont(font);
+		g.setColor(Color.blue);
+		// Draw a string such that its base line is at x, y
 		g.drawString(this.name, x, y);
 	}
 	/*

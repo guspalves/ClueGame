@@ -526,20 +526,46 @@ public class Board extends JPanel {
 					x = x + width;
 				}
 				
-				for(Player player : playerArr) {
-					if (player.getRow() == i && player.getCol() == j) {
-						player.draw(g, x - width + 2, y + 2, width - 4, height - 4);
+				if(grid[i][j].isDoorway()) {
+					switch(grid[i][j].getDoorDirection()) {
+					case UP:
+						grid[i][j].drawDoor(g, x-width, y, width, 4);
+						break;
+					case DOWN:
+						grid[i][j].drawDoor(g, x-width, y+height-5, width, 4);
+						break;
+					case RIGHT:
+						grid[i][j].drawDoor(g, x-5, y, 4, height);
+						break;
+					case LEFT:
+						grid[i][j].drawDoor(g, x-width, y, 4, height);
+						break;
 					}
+							
 				}
 			}
 			x = 0;
 			y = y + height;
 		}
 		
-//		for(Room r : roomMap) {
-//			r.draw(g, x, y, width);
-//		}
+		for(Player player : playerArr) {
+			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
+		}
 		
+		for(Map.Entry<Character, Room> entry : roomMap.entrySet()) {
+			// Creating temporary room from roomMap
+			Room temp = roomMap.get(entry.getKey());
+			
+			// Since walkway and usued was added to room, ensuring that they are skipped
+			if(temp.getRoomName().equals("Walkway") || temp.getRoomName().equals("Unused")) {
+				continue;
+			}
+			
+			// Getting col, row, and drawing room
+			int row = temp.getLabelCell().getRow();
+			int col = temp.getLabelCell().getCol();
+			temp.draw(g, col*width, row*height);
+		}
 	}
 	
 	/*

@@ -34,6 +34,7 @@ public class GameCardPanel extends JPanel{
 		roomsInHandList = new ArrayList<JTextField>();
 
 		setLayout(new GridLayout(0,1));
+		mainPanel.setPreferredSize(new Dimension(250, 820));
 		
 		// Create a layout with 2 rows
 		mainPanel.setLayout(new GridLayout(3, 1));
@@ -301,7 +302,7 @@ public class GameCardPanel extends JPanel{
 		GameCardPanel panel = new GameCardPanel();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
 		frame.setContentPane(panel); // put the panel in the frame
-		frame.setSize(500, 820);  // size the frame
+		frame.setSize(200, 820);  // size the frame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true); // make it visible
 		
