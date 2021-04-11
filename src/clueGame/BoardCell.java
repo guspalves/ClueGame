@@ -16,7 +16,7 @@ public class BoardCell {
 	private int row, col;
 	private char initial;
 	private DoorDirection doorDirection;
-	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway, isOccupied;
+	private boolean roomLabel, roomCenter, isRoom, isSecretPassage, isDoorway, isOccupied, isTarget;
 	private String roomName;
 	private char secretPassage;
 	private char entryToRoom;
@@ -120,6 +120,10 @@ public class BoardCell {
 		return roomCard;
 	}
 	
+	public boolean isTarget() {
+		return isTarget;
+	}
+	
 	/*
 	 * Setters
 	 */
@@ -166,6 +170,10 @@ public class BoardCell {
 
 	public void setRoomCard(Card roomCard) {
 		this.roomCard = roomCard;
+	}
+
+	public void setTarget(boolean isTarget) {
+		this.isTarget = isTarget;
 	}
 }
 

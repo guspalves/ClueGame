@@ -12,6 +12,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameControlPanel extends JPanel{
 	// Instance Variables for JTextFields
@@ -19,6 +21,7 @@ public class GameControlPanel extends JPanel{
 	private JTextField playerName;
 	private JTextField guessValue;
 	private JTextField guessResultPanel;
+	private static GameControlPanel controlPanel = new GameControlPanel();
 
 	// Constructor
 	public GameControlPanel() {
@@ -32,6 +35,11 @@ public class GameControlPanel extends JPanel{
 		// Creating second panel and adding it to main panel
 		panel = createSecondPanel();
 		add(panel);
+	}
+	
+	// getter for controlPanel
+	public static GameControlPanel getInstance() {
+		return controlPanel;
 	}
 
 	
@@ -51,6 +59,11 @@ public class GameControlPanel extends JPanel{
 		// Creating buttons
 		JButton accusationButton = new JButton("Make Accusation");
 		JButton nextButton = new JButton("NEXT!");
+		
+		// Adding action to buttons
+		nextButton.addActionListener(new NextButtonListener());
+		
+		// Adding buttons to panel
 		panel.add(accusationButton);
 		panel.add(nextButton);
 		
@@ -136,6 +149,23 @@ public class GameControlPanel extends JPanel{
 		guessValue.setText(guess);
 	}
 	
+	public void setRollValue(int roll) {
+		rollValue.setText(Integer.toString(roll));
+	}
+	
+	public void setPlayerName(String name, Color color) {
+		playerName.setBackground(color);
+		playerName.setText(name);
+	}
+	
+	// Button Listener class
+	private class NextButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Board board = Board.getInstance();
+			board.nextPlayerFlow();
+		}
+	}
 	public static void main(String[] args) {
 		GameControlPanel panel = new GameControlPanel();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 

@@ -33,6 +33,9 @@ public class Board extends JPanel {
 	private ArrayList<Card> deck;
 	private Solution theAnswer;
 	private Scanner scan;
+	private HumanPlayer humanPlayer;
+	private int playerCounter = -1;
+	private ArrayList<Character> targetRooms;
 
 	// Board constructor
 	private Board() {
@@ -54,7 +57,8 @@ public class Board extends JPanel {
 		deck = new ArrayList<Card>();
 		weaponArr = new ArrayList<Card>();
 		roomArr = new ArrayList<Card>();
-		
+		targetRooms = new ArrayList<Character>();
+
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
@@ -90,19 +94,19 @@ public class Board extends JPanel {
 
 				String[] tempList = temp.split(", ");
 				String tempString = tempList[0];
-				
+
 				if(!tempString.equals("Room") && !tempString.equals("Space") && !tempString.equals("Player") && !tempString.equals("Weapon")) { 
 					throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 				}
-				
+
 				// Handles reading in rooms and spaces
 				if(tempString.equals("Room") || tempString.equals("Space")) {
 					if(tempList[1].equals("Walkway")) walkwayChar = tempList[2].charAt(0);
 					if(tempList[1].equals("Unused")) unusedChar = tempList[2].charAt(0);
-					
+
 					Room room = new Room(tempList[1]);
 					Character symbol = tempList[2].charAt(0);
-					
+
 					roomMap.put(symbol, room);
 					if(tempString.equals("Room")) {
 						Card roomCard = new Card(tempList[1], CardType.ROOM);
@@ -112,48 +116,49 @@ public class Board extends JPanel {
 					}
 					continue;
 				}
-				
+
 				// Handles reading in players
 				if(tempString.equals("Player")) {
 					String name = tempList[1];
 					String colorString = tempList[2];
-					
+
 					// Initializing color
 					Color color = null;
-					
+
 					// Switch statement to figure out color
 					switch(colorString) {
-						case "Black":
-							color = Color.black;
-							break;
-						case "Blue":
-							color = Color.blue;
-							break;
-						case "Yellow":
-							color = Color.yellow;
-							break;
-						case "Red":
-							color = Color.red;
-							break;
-						case "Green":
-							color = Color.green;
-							break;
-						case "Pink":
-							color = Color.pink;
-							break;
-						
-						default:
-							throw new BadConfigFormatException("Config File Does Not Have Proper Format");
+					case "Grey":
+						color = Color.lightGray;
+						break;
+					case "Blue":
+						color = Color.cyan;
+						break;
+					case "Yellow":
+						color = Color.yellow;
+						break;
+					case "Red":
+						color = new Color(255, 87, 51);
+						break;
+					case "Green":
+						color = Color.green;
+						break;
+					case "Pink":
+						color = Color.pink;
+						break;
+
+					default:
+						throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 					}
-					
+
 					// Figuring out starting location
 					int startRow = Integer.parseInt(tempList[4]);
 					int startCol = Integer.parseInt(tempList[5]);
-					
+
 					// Creating player
 					if(tempList[3].equals("Human")) {
 						HumanPlayer player = new HumanPlayer(name, color, startRow, startCol);
 						playerArr.add(player);
+						humanPlayer = player;
 						Card playerCard = new Card(name, CardType.PERSON);
 						deck.add(playerCard);
 					} else if(tempList[3].equals("Computer"))  {
@@ -164,11 +169,11 @@ public class Board extends JPanel {
 					} else {
 						throw new BadConfigFormatException("Config File Does Not Have Proper Format");
 					}
-					
+
 					// Going to next iteration
 					continue;
 				}
-				
+
 				if(tempString.equals("Weapon")) {
 					String weaponName = tempList[1];
 					Card weaponCard = new Card(weaponName, CardType.WEAPON);
@@ -176,7 +181,7 @@ public class Board extends JPanel {
 					weaponArr.add(weaponCard);
 					continue;
 				}
-				
+
 			}
 
 			scan.close();
@@ -332,7 +337,7 @@ public class Board extends JPanel {
 			for(int j = 0; j < numColumns; j++) {
 				// Obtaining wanted cell
 				BoardCell tempCell = grid[i][j];
-				
+
 				// Obtaining wanted char
 				char initial = tempCell.getInitial();
 
@@ -440,13 +445,13 @@ public class Board extends JPanel {
 		}
 		// Use random numbers to create theAnswer
 		ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
-		
+
 		// Card indices for solution
 		Random random = new Random();
 		int roomCardIndex = random.nextInt(roomArr.size());
 		int personCardIndex = random.nextInt(playerArr.size() - 1) + roomArr.size();
 		int weaponCardIndex = random.nextInt(weaponArr.size() - 2) + playerArr.size() + roomArr.size();
-		
+
 		// geting cards for solution
 		Card roomCard = deck.get(roomCardIndex);
 		tempDeck.remove(roomCardIndex);
@@ -454,36 +459,36 @@ public class Board extends JPanel {
 		tempDeck.remove(personCardIndex);
 		Card weaponCard = deck.get(weaponCardIndex);
 		tempDeck.remove(weaponCardIndex);
-		
+
 		// Creating solution
 		theAnswer = new Solution(personCard, roomCard, weaponCard);
-		
+
 		int playerIndex = 0;
 		// Deals remaining cards to the players
 		while(!tempDeck.isEmpty()) {
 			int cardDealtIndex = random.nextInt(tempDeck.size());
-			
+
 			Card cardDealt = tempDeck.get(cardDealtIndex);
 			tempDeck.remove(cardDealtIndex);
-			
+
 			playerArr.get(playerIndex).updateHand(cardDealt);
-			
+
 			playerIndex++;
-			
+
 			if(playerIndex >= playerArr.size()) {
 				playerIndex = 0;
 			}
 		}
 	}
-	
+
 	public void setAnswer(Card person, Card room, Card weapon) {
 		theAnswer = new Solution(person, room, weapon);	
 	}
-	
+
 	public boolean checkAccusation(Solution solution) {
 		return theAnswer.isSolution(solution);
 	}
-	
+
 	public Card handleSuggestion(Solution suggestion) {
 		for(Player p : playerArr) {
 			if(p.disproveSuggestion(suggestion) != null){
@@ -492,47 +497,57 @@ public class Board extends JPanel {
 		}
 		return null;
 	}
-	
+
 	// Method for testing
 	public void setPlayerArr(ArrayList<Player> players) {
 		playerArr = players;
 	}
-	
+
 	/*
 	 * GUI Functions
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		int x = 0;
 		int y = 0;
-		
+
 		// find width and height of cells
 		int width = getWidth() / numColumns;
 		int height = getHeight() / numRows;
-		
+
 		// iterate over game board
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
 				char initial = grid[i][j].getInitial();
-				
+
 				// draw the walkway cells tan
 				if(initial == walkwayChar) {
 					grid[i][j].draw(g, new Color(221,189,77), Color.black, x, y, width, height);
 					x = x + width;
-				
-				// draw unused cells black
+
+					// draw unused cells black
 				} else if(initial == unusedChar) {
 					grid[i][j].draw(g, Color.black, Color.black, x, y, width, height);
 					x = x + width;
-				
-				// draw room cells gray
+
+					// draw room cells gray
 				} else {
-					grid[i][j].draw(g, Color.LIGHT_GRAY, Color.LIGHT_GRAY, x, y, width, height);
+					grid[i][j].draw(g, Color.lightGray, Color.lightGray, x, y, width, height);
 					x = x + width;
 				}
+
+				if(grid[i][j].isTarget()) {
+					grid[i][j].draw(g, Color.yellow, Color.black, x - width, y, width, height);
+				}
 				
+				for(int k = 0; k < targetRooms.size(); k++) {
+					if(grid[i][j].getInitial() == targetRooms.get(k)) {
+						grid[i][j].draw(g, Color.yellow, Color.yellow, x - width, y, width, height);
+					}
+				}
+
 				// Draw doorways
 				if(grid[i][j].isDoorway()) {
 					switch(grid[i][j].getDoorDirection()) {
@@ -549,39 +564,112 @@ public class Board extends JPanel {
 						grid[i][j].drawDoor(g, x-width, y, 4, height);
 						break;
 					}
-							
+
 				}
 			}
 			x = 0;
 			y = y + height;
 		}
-		
+
 		// Draw players
 		for(Player player : playerArr) {
 			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
 		}
-		
+
 		// Draw room names over the rooms
 		for(Map.Entry<Character, Room> entry : roomMap.entrySet()) {
 			// Creating temporary room from roomMap
 			Room temp = roomMap.get(entry.getKey());
-			
+
 			// Since walkway and usued was added to room, ensuring that they are skipped
 			if(temp.getRoomName().equals("Walkway") || temp.getRoomName().equals("Unused")) {
 				continue;
 			}
-			
+
 			// Getting col, row, and drawing room
 			int row = temp.getLabelCell().getRow();
 			int col = temp.getLabelCell().getCol();
 			temp.draw(g, col*width, row*height);
 		}
 	}
+
+	//Next button logic
+	public void nextPlayerFlow() {	
+		// Updating current player
+		playerCounter++;
+
+		if(playerCounter >= playerArr.size()) {
+			playerCounter = 0;
+		}
+
+		// Getting current player and updating player
+		Player currentPlayer = playerArr.get(playerCounter);
+
+		//TODO Error message for human player
+//		if(currentPlayer instanceof HumanPlayer) {
+//			if(!((HumanPlayer) currentPlayer).isFinished()) {
+//				ClueGame game = new ClueGame();
+//				game.errorMessage();
+//				return;
+//			}
+//		}
+
+		// Resetting the targets (i.e, so we don't paint them)
+		for(BoardCell targets : getTargets()) {
+			targets.setTarget(false);
+		}
+		targetRooms.clear();
+		
+		this.repaint();
+
+		// Getting roll value
+		Random rand = new Random();
+		int roll = rand.nextInt(6)+1;
+
+		// Calculating targets
+
+		// Setting temp BoardCell
+		BoardCell cell = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+		calcTargets(cell, roll);
+
+		// Getting all targets
+		Set<BoardCell> cellTargets = getTargets();
+
+		// Setting roll value to display
+		GameControlPanel controlPanel = GameControlPanel.getInstance();
+		controlPanel.setRollValue(roll);
+
+		// Set the name to display
+		controlPanel.setPlayerName(currentPlayer.getName(), currentPlayer.getColor());
+
+		if(currentPlayer instanceof HumanPlayer) {
+			// Display Targets
+			for(BoardCell target : cellTargets) {
+				target.setTarget(true);
+				if(target.getInitial() != walkwayChar) {
+					targetRooms.add(target.getInitial());
+				}
+			}
+
+			this.repaint();
+
+			// Flag unfinished
+			((HumanPlayer) currentPlayer).setFinished(false);
+			
+			return;
+		}
+		
+		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(cellTargets);
+		currentPlayer.setRow(fin.getRow());
+		currentPlayer.setCol(fin.getCol());
+	}
 	
+
+
 	/*
 	 * Getters
 	 */
-	
+
 	public Solution getTheAnswer() {
 		return theAnswer;
 	}
@@ -617,8 +705,12 @@ public class Board extends JPanel {
 	public ArrayList<Card> getDeck() {
 		return deck;
 	}
-	
+
 	public ArrayList<Player> getPlayerArray() {
 		return playerArr;
+	}
+
+	public Player getHumanPlayer() {
+		return humanPlayer;
 	}
 }

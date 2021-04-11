@@ -12,9 +12,10 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 
 public class ClueGame extends JFrame {
-	GameControlPanel controlPanel = new GameControlPanel();
-	GameCardPanel cardPanel = new GameCardPanel();
-	Board board;
+	private GameControlPanel controlPanel = GameControlPanel.getInstance();
+	private GameCardPanel cardPanel = new GameCardPanel();
+	private Board board;
+	private String name;
 	
 	// Constructor
 	public ClueGame(){
@@ -30,10 +31,26 @@ public class ClueGame extends JFrame {
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
 		add(board, BorderLayout.CENTER);
+		
+		// Name the board
+		setTitle("Clue Game");
+		
+		// Setting the name of the player
+		name = board.getHumanPlayer().getName();
 	}
 	
+	public void errorMessage() {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "Please finish your turn.", "Error Message", 0);
+	}
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
+		
+		// Message Dialog
+		JOptionPane.showMessageDialog(game, "You are " + game.name + ". \nCan you find the solution \nbefore the Computer players?", "Welcome to Clue", 1);
+		
+		Board board = Board.getInstance();
+		board.nextPlayerFlow();
 	}
 }

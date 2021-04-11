@@ -93,6 +93,17 @@ public abstract class Player {
 	}
 
 	/*
+	 * Setters
+	 */
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+	
+	/*
 	 * Getters
 	 */
 	public String getName() {
