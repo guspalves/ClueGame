@@ -9,6 +9,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.*;
 
 public class BoardCell {
@@ -22,6 +24,8 @@ public class BoardCell {
 	private char entryToRoom;
 	Set<BoardCell> adjList;
 	private Card roomCard;
+	private int width, height, x, y;
+	
 	
 	// Constructors
 	public BoardCell(){
@@ -43,6 +47,11 @@ public class BoardCell {
 	
 	// Draw function
 	public void draw(Graphics g, Color color, Color lineColor, int x, int y, int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.x = x;
+		this.y = y;
+		
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
 		
@@ -55,6 +64,15 @@ public class BoardCell {
 		g.setColor(Color.blue);
 		g.fillRect(x,y,dx,dy);
 	}
+	
+	public boolean containsClick(int mouseX, int mouseY) {
+		Rectangle rect = new Rectangle(x, y, this.width, this.height);
+		if(rect.contains(new Point(mouseX, mouseY))) {
+			return true;
+		}
+		return false;
+	}
+	
 	/*
 	 * Getters
 	 */

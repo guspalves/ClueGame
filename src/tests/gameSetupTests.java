@@ -56,7 +56,7 @@ class gameSetupTests {
 		ArrayList<Player> playerArr = board.getPlayerArray();
 		ComputerPlayer tmp = (ComputerPlayer) playerArr.get(5);
 		assertTrue(tmp.getName().equals("Miss Scarlet"));
-		assertTrue(tmp.getColor() == Color.red);
+		assertTrue(tmp.getColor().equals(new Color(255,87,51)));
 		assertEquals(tmp.getRow(), 13);
 		assertEquals(tmp.getCol(), 21);
 	}

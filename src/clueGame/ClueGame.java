@@ -16,7 +16,10 @@ public class ClueGame extends JFrame {
 	private GameCardPanel cardPanel = new GameCardPanel();
 	private Board board;
 	private String name;
+	private static ClueGame clueGame = new ClueGame();
 	
+	
+
 	// Constructor
 	public ClueGame(){
 		setSize(1000,1000);
@@ -43,6 +46,12 @@ public class ClueGame extends JFrame {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, "Please finish your turn.", "Error Message", 0);
 	}
+	
+	public void notTargetMessage() {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "Not a target.", "Error Message", 0);
+	}
+	
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
@@ -52,5 +61,9 @@ public class ClueGame extends JFrame {
 		
 		Board board = Board.getInstance();
 		board.nextPlayerFlow();
+	}
+
+	public static ClueGame getInstance() {
+		return clueGame;
 	}
 }

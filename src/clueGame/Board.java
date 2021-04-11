@@ -9,13 +9,15 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import javax.swing.*;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener{
 	// Instance variables
 	private BoardCell[][] grid;
 	private int numRows, numColumns;
@@ -36,6 +38,7 @@ public class Board extends JPanel {
 	private HumanPlayer humanPlayer;
 	private int playerCounter = -1;
 	private ArrayList<Character> targetRooms;
+	private boolean selectionMade;
 
 	// Board constructor
 	private Board() {
@@ -58,6 +61,8 @@ public class Board extends JPanel {
 		weaponArr = new ArrayList<Card>();
 		roomArr = new ArrayList<Card>();
 		targetRooms = new ArrayList<Character>();
+
+		addMouseListener(this);
 
 		try {
 			loadSetupConfig();
@@ -541,10 +546,11 @@ public class Board extends JPanel {
 				if(grid[i][j].isTarget()) {
 					grid[i][j].draw(g, Color.yellow, Color.black, x - width, y, width, height);
 				}
-				
+
 				for(int k = 0; k < targetRooms.size(); k++) {
 					if(grid[i][j].getInitial() == targetRooms.get(k)) {
 						grid[i][j].draw(g, Color.yellow, Color.yellow, x - width, y, width, height);
+						targets.add(grid[i][j]);
 					}
 				}
 
@@ -596,6 +602,7 @@ public class Board extends JPanel {
 	//Next button logic
 	public void nextPlayerFlow() {	
 		// Updating current player
+		this.repaint();
 		playerCounter++;
 
 		if(playerCounter >= playerArr.size()) {
@@ -605,22 +612,17 @@ public class Board extends JPanel {
 		// Getting current player and updating player
 		Player currentPlayer = playerArr.get(playerCounter);
 
-		//TODO Error message for human player
+//		//TODO Error message for human player
 //		if(currentPlayer instanceof HumanPlayer) {
 //			if(!((HumanPlayer) currentPlayer).isFinished()) {
-//				ClueGame game = new ClueGame();
+//				ClueGame game = ClueGame.getInstance();
 //				game.errorMessage();
 //				return;
 //			}
 //		}
 
 		// Resetting the targets (i.e, so we don't paint them)
-		for(BoardCell targets : getTargets()) {
-			targets.setTarget(false);
-		}
-		targetRooms.clear();
-		
-		this.repaint();
+
 
 		// Getting roll value
 		Random rand = new Random();
@@ -633,7 +635,7 @@ public class Board extends JPanel {
 		calcTargets(cell, roll);
 
 		// Getting all targets
-		Set<BoardCell> cellTargets = getTargets();
+
 
 		// Setting roll value to display
 		GameControlPanel controlPanel = GameControlPanel.getInstance();
@@ -643,8 +645,9 @@ public class Board extends JPanel {
 		controlPanel.setPlayerName(currentPlayer.getName(), currentPlayer.getColor());
 
 		if(currentPlayer instanceof HumanPlayer) {
+			selectionMade = false;
 			// Display Targets
-			for(BoardCell target : cellTargets) {
+			for(BoardCell target : targets) {
 				target.setTarget(true);
 				if(target.getInitial() != walkwayChar) {
 					targetRooms.add(target.getInitial());
@@ -655,62 +658,118 @@ public class Board extends JPanel {
 
 			// Flag unfinished
 			((HumanPlayer) currentPlayer).setFinished(false);
-			
+
 			return;
 		}
-		
-		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(cellTargets);
+
+		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
 		currentPlayer.setRow(fin.getRow());
 		currentPlayer.setCol(fin.getCol());
 	}
-	
 
+	// Game Board Listener
+	@Override
+	public void mouseClicked(MouseEvent e) {
 
-	/*
-	 * Getters
-	 */
-
-	public Solution getTheAnswer() {
-		return theAnswer;
 	}
 
-	public Room getRoom(char c) {
-		return roomMap.get(c);
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(selectionMade) {
+			return;
+		}
+
+		BoardCell selected = null;
+
+		for(BoardCell target : targets) {
+			if(target.containsClick(e.getX(), e.getY())) {
+				if(target.getInitial() != walkwayChar) {
+					selected = roomMap.get(target.getInitial()).getCenterCell();
+					selectionMade = true;
+					break;
+				}
+				selected = target;
+				selectionMade = true;
+				break;
+			}
+		}
+		
+		
+
+	if(!selectionMade) {
+		ClueGame.getInstance().notTargetMessage();
+		return;
 	}
 
-	public Room getRoom(BoardCell cell) {
-		return roomMap.get(cell.getInitial());
+	for(BoardCell targets : getTargets()) {
+		targets.setTarget(false);
 	}
 
-	public int getNumRows() {
-		return numRows;
-	}
+	targetRooms.clear();
 
-	public int getNumColumns() {
-		return numColumns;
-	}
+	this.repaint();
 
-	public BoardCell getCell(int row, int col) {
-		return grid[row][col];
-	}
+	HumanPlayer currentPlayer = (HumanPlayer) playerArr.get(playerCounter);
+	currentPlayer.setRow(selected.getRow());
+	currentPlayer.setCol(selected.getCol());
+	this.repaint();
+}
 
-	public Set<BoardCell> getAdjList(int row, int col) {
-		return grid[row][col].getAdjList();
-	}
 
-	public Set<BoardCell> getTargets() {
-		return targets;
-	}
+/*
+ * Getters
+ */
 
-	public ArrayList<Card> getDeck() {
-		return deck;
-	}
+public Solution getTheAnswer() {
+	return theAnswer;
+}
 
-	public ArrayList<Player> getPlayerArray() {
-		return playerArr;
-	}
+public Room getRoom(char c) {
+	return roomMap.get(c);
+}
 
-	public Player getHumanPlayer() {
-		return humanPlayer;
-	}
+public Room getRoom(BoardCell cell) {
+	return roomMap.get(cell.getInitial());
+}
+
+public int getNumRows() {
+	return numRows;
+}
+
+public int getNumColumns() {
+	return numColumns;
+}
+
+public BoardCell getCell(int row, int col) {
+	return grid[row][col];
+}
+
+public Set<BoardCell> getAdjList(int row, int col) {
+	return grid[row][col].getAdjList();
+}
+
+public Set<BoardCell> getTargets() {
+	return targets;
+}
+
+public ArrayList<Card> getDeck() {
+	return deck;
+}
+
+public ArrayList<Player> getPlayerArray() {
+	return playerArr;
+}
+
+public Player getHumanPlayer() {
+	return humanPlayer;
+}
 }
