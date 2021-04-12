@@ -70,6 +70,7 @@ public class Board extends JPanel implements MouseListener{
 			loadLayoutConfig();
 			calculateAdjacency();
 			deal();
+			
 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());

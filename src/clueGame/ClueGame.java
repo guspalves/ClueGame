@@ -30,6 +30,21 @@ public class ClueGame extends JFrame {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
 		
+		Player human = board.getHumanPlayer();
+		for(Card card : human.getCardArr()) {
+			if(card.getType() == CardType.ROOM) {
+				cardPanel.updateRoomsInHand(card);
+			}
+			if(card.getType() == CardType.WEAPON) {
+				cardPanel.updateWeaponInHand(card);
+			}
+			if(card.getType() == CardType.PERSON) {
+				cardPanel.updatePeopleInHand(card);
+			}
+		}
+		
+		
+		
 		// format display for the game
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
