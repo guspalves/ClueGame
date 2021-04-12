@@ -36,9 +36,10 @@ public class Board extends JPanel implements MouseListener{
 	private Solution theAnswer;
 	private Scanner scan;
 	private HumanPlayer humanPlayer;
-	private int playerCounter = -1;
+	private int playerCounter = 0;
 	private ArrayList<Character> targetRooms;
 	private boolean selectionMade;
+	private int errorCounter = 1;
 
 	// Board constructor
 	private Board() {
@@ -132,8 +133,8 @@ public class Board extends JPanel implements MouseListener{
 
 					// Switch statement to figure out color
 					switch(colorString) {
-					case "Grey":
-						color = Color.lightGray;
+					case "Magenta":
+						color = Color.magenta;
 						break;
 					case "Blue":
 						color = Color.cyan;
@@ -578,7 +579,15 @@ public class Board extends JPanel implements MouseListener{
 		}
 
 		// Draw players
-		for(Player player : playerArr) {
+		for(int i = 0; i < playerArr.size(); i++) {
+			Player player = playerArr.get(i);
+			
+			for(int j = i+1; j < playerArr.size(); j++) {
+				if(playerArr.get(i).getRow() == playerArr.get(j).getRow() && playerArr.get(i).getCol() == playerArr.get(j).getCol()) {
+					player.draw(g, player.getCol()*width + 10, player.getRow()*height + 2, width - 4, height - 4);
+					break;
+				}
+			}
 			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
 		}
 
@@ -603,24 +612,24 @@ public class Board extends JPanel implements MouseListener{
 	public void nextPlayerFlow() {	
 		// Updating current player
 		this.repaint();
+		
+		// Getting current player and updating player
+		Player currentPlayer = playerArr.get(playerCounter);
+		
+		if(currentPlayer instanceof HumanPlayer) {
+			if(!((HumanPlayer) currentPlayer).isFinished()){
+				ClueGame game = ClueGame.getInstance();
+				game.errorMessage();
+				return;
+			}
+		}
+		
 		playerCounter++;
 
 		if(playerCounter >= playerArr.size()) {
 			playerCounter = 0;
 		}
-
-		// Getting current player and updating player
-		Player currentPlayer = playerArr.get(playerCounter);
-
-//		//TODO Error message for human player
-//		if(currentPlayer instanceof HumanPlayer) {
-//			if(!((HumanPlayer) currentPlayer).isFinished()) {
-//				ClueGame game = ClueGame.getInstance();
-//				game.errorMessage();
-//				return;
-//			}
-//		}
-
+		
 		// Resetting the targets (i.e, so we don't paint them)
 
 
@@ -633,9 +642,6 @@ public class Board extends JPanel implements MouseListener{
 		// Setting temp BoardCell
 		BoardCell cell = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		calcTargets(cell, roll);
-
-		// Getting all targets
-
 
 		// Setting roll value to display
 		GameControlPanel controlPanel = GameControlPanel.getInstance();
@@ -655,23 +661,26 @@ public class Board extends JPanel implements MouseListener{
 			}
 
 			this.repaint();
-
+			
 			// Flag unfinished
 			((HumanPlayer) currentPlayer).setFinished(false);
+			playerCounter--;
 
 			return;
 		}
-
+		
+		BoardCell tmp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+		tmp.setOccupied(false);
+		
 		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
+		fin.setOccupied(true);
 		currentPlayer.setRow(fin.getRow());
 		currentPlayer.setCol(fin.getCol());
 	}
 
 	// Game Board Listener
 	@Override
-	public void mouseClicked(MouseEvent e) {
-
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}
@@ -687,6 +696,12 @@ public class Board extends JPanel implements MouseListener{
 		if(selectionMade) {
 			return;
 		}
+		
+		if(targets.isEmpty() && !selectionMade) {
+			Player currentPlayer = playerArr.get(playerCounter);
+			((HumanPlayer) currentPlayer).setFinished(true);
+			return;
+		}
 
 		BoardCell selected = null;
 
@@ -695,10 +710,14 @@ public class Board extends JPanel implements MouseListener{
 				if(target.getInitial() != walkwayChar) {
 					selected = roomMap.get(target.getInitial()).getCenterCell();
 					selectionMade = true;
+					Player currentPlayer = playerArr.get(playerCounter);
+					((HumanPlayer) currentPlayer).setFinished(true);
 					break;
 				}
 				selected = target;
 				selectionMade = true;
+				Player currentPlayer = playerArr.get(playerCounter);
+				((HumanPlayer) currentPlayer).setFinished(true);
 				break;
 			}
 		}
@@ -706,7 +725,12 @@ public class Board extends JPanel implements MouseListener{
 		
 
 	if(!selectionMade) {
-		ClueGame.getInstance().notTargetMessage();
+		if(errorCounter % 2 == 0) {
+			errorCounter++;
+			ClueGame.getInstance().notTargetMessage();
+			return;
+		}
+		errorCounter++;
 		return;
 	}
 
@@ -719,8 +743,17 @@ public class Board extends JPanel implements MouseListener{
 	this.repaint();
 
 	HumanPlayer currentPlayer = (HumanPlayer) playerArr.get(playerCounter);
+	
+	BoardCell temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+	temp.setOccupied(false);
+	
 	currentPlayer.setRow(selected.getRow());
 	currentPlayer.setCol(selected.getCol());
+	
+	temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+	temp.setOccupied(true);
+	
+	playerCounter++;
 	this.repaint();
 }
 
