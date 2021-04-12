@@ -65,6 +65,7 @@ public class BoardCell {
 		g.fillRect(x,y,dx,dy);
 	}
 	
+	// Returning selected cell
 	public boolean containsClick(int mouseX, int mouseY) {
 		Rectangle rect = new Rectangle(x, y, this.width, this.height);
 		if(rect.contains(new Point(mouseX, mouseY))) {

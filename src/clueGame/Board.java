@@ -70,7 +70,7 @@ public class Board extends JPanel implements MouseListener{
 			loadLayoutConfig();
 			calculateAdjacency();
 			deal();
-			
+
 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
@@ -582,7 +582,8 @@ public class Board extends JPanel implements MouseListener{
 		// Draw players
 		for(int i = 0; i < playerArr.size(); i++) {
 			Player player = playerArr.get(i);
-			
+
+			// Looping through so if any other players are on the same room, they don't get printed over each other
 			for(int j = i+1; j < playerArr.size(); j++) {
 				if(playerArr.get(i).getRow() == playerArr.get(j).getRow() && playerArr.get(i).getCol() == playerArr.get(j).getCol()) {
 					player.draw(g, player.getCol()*width + 10, player.getRow()*height + 2, width - 4, height - 4);
@@ -613,33 +614,32 @@ public class Board extends JPanel implements MouseListener{
 	public void nextPlayerFlow() {	
 		// Updating current player
 		this.repaint();
-		
+
 		// Getting current player and updating player
 		Player currentPlayer = playerArr.get(playerCounter);
-		
+
+		// Ensuring the user has finished his turn before moving on
 		if(currentPlayer instanceof HumanPlayer) {
 			if(!((HumanPlayer) currentPlayer).isFinished()){
+				// Throwing new error message
 				ClueGame game = ClueGame.getInstance();
-				game.errorMessage();
+				game.notFinishedMessage();
 				return;
 			}
 		}
-		
+
+		// Incrementing player
 		playerCounter++;
 
 		if(playerCounter >= playerArr.size()) {
 			playerCounter = 0;
 		}
-		
-		// Resetting the targets (i.e, so we don't paint them)
-
 
 		// Getting roll value
 		Random rand = new Random();
 		int roll = rand.nextInt(6)+1;
 
 		// Calculating targets
-
 		// Setting temp BoardCell
 		BoardCell cell = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		calcTargets(cell, roll);
@@ -651,6 +651,7 @@ public class Board extends JPanel implements MouseListener{
 		// Set the name to display
 		controlPanel.setPlayerName(currentPlayer.getName(), currentPlayer.getColor());
 
+		// Checking if current player is human for extra functionality
 		if(currentPlayer instanceof HumanPlayer) {
 			selectionMade = false;
 			// Display Targets
@@ -661,18 +662,21 @@ public class Board extends JPanel implements MouseListener{
 				}
 			}
 
+			// Updating board
 			this.repaint();
-			
+
 			// Flag unfinished
 			((HumanPlayer) currentPlayer).setFinished(false);
 			playerCounter--;
 
 			return;
 		}
-		
+
+		// Setting the previous cell to be unoccupied
 		BoardCell tmp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		tmp.setOccupied(false);
-		
+
+		// Moving computer players to new cell and setting it to be occupied
 		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
 		fin.setOccupied(true);
 		currentPlayer.setRow(fin.getRow());
@@ -694,20 +698,26 @@ public class Board extends JPanel implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		// Ensuring a choice was already made
 		if(selectionMade) {
 			return;
 		}
-		
+
+		// Checking if it's not possible to move
 		if(targets.isEmpty() && !selectionMade) {
 			Player currentPlayer = playerArr.get(playerCounter);
 			((HumanPlayer) currentPlayer).setFinished(true);
 			return;
 		}
 
+		// Temp board cell
 		BoardCell selected = null;
 
+		// Determining which cell was selected 
 		for(BoardCell target : targets) {
 			if(target.containsClick(e.getX(), e.getY())) {
+				
+				// Making it so any click on a room cell will lead to the room center
 				if(target.getInitial() != walkwayChar) {
 					selected = roomMap.get(target.getInitial()).getCenterCell();
 					selectionMade = true;
@@ -715,6 +725,8 @@ public class Board extends JPanel implements MouseListener{
 					((HumanPlayer) currentPlayer).setFinished(true);
 					break;
 				}
+				
+				// Choosing new cell
 				selected = target;
 				selectionMade = true;
 				Player currentPlayer = playerArr.get(playerCounter);
@@ -722,88 +734,86 @@ public class Board extends JPanel implements MouseListener{
 				break;
 			}
 		}
-		
-		
 
-	if(!selectionMade) {
-		if(errorCounter % 2 == 0) {
+
+		// Error message for not selecting a target
+		if(!selectionMade) {
+			if(errorCounter % 2 == 0) {
+				errorCounter++;
+				ClueGame.getInstance().notTargetMessage();
+				return;
+			}
 			errorCounter++;
-			ClueGame.getInstance().notTargetMessage();
 			return;
 		}
-		errorCounter++;
-		return;
+
+		// Resetting the targets and repainting the board
+		for(BoardCell targets : getTargets()) {
+			targets.setTarget(false);
+		}
+		targetRooms.clear();
+		this.repaint();
+
+		// Moving the human player to selected target
+		HumanPlayer currentPlayer = (HumanPlayer) playerArr.get(playerCounter);
+		BoardCell temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+		temp.setOccupied(false);
+		currentPlayer.setRow(selected.getRow());
+		currentPlayer.setCol(selected.getCol());
+		temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
+		temp.setOccupied(true);
+
+		// Incrementing and repainting
+		playerCounter++;
+		this.repaint();
 	}
 
-	for(BoardCell targets : getTargets()) {
-		targets.setTarget(false);
+
+	/*
+	 * Getters
+	 */
+
+	public Solution getTheAnswer() {
+		return theAnswer;
 	}
 
-	targetRooms.clear();
+	public Room getRoom(char c) {
+		return roomMap.get(c);
+	}
 
-	this.repaint();
+	public Room getRoom(BoardCell cell) {
+		return roomMap.get(cell.getInitial());
+	}
 
-	HumanPlayer currentPlayer = (HumanPlayer) playerArr.get(playerCounter);
-	
-	BoardCell temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
-	temp.setOccupied(false);
-	
-	currentPlayer.setRow(selected.getRow());
-	currentPlayer.setCol(selected.getCol());
-	
-	temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
-	temp.setOccupied(true);
-	
-	playerCounter++;
-	this.repaint();
-}
+	public int getNumRows() {
+		return numRows;
+	}
 
+	public int getNumColumns() {
+		return numColumns;
+	}
 
-/*
- * Getters
- */
+	public BoardCell getCell(int row, int col) {
+		return grid[row][col];
+	}
 
-public Solution getTheAnswer() {
-	return theAnswer;
-}
+	public Set<BoardCell> getAdjList(int row, int col) {
+		return grid[row][col].getAdjList();
+	}
 
-public Room getRoom(char c) {
-	return roomMap.get(c);
-}
+	public Set<BoardCell> getTargets() {
+		return targets;
+	}
 
-public Room getRoom(BoardCell cell) {
-	return roomMap.get(cell.getInitial());
-}
+	public ArrayList<Card> getDeck() {
+		return deck;
+	}
 
-public int getNumRows() {
-	return numRows;
-}
+	public ArrayList<Player> getPlayerArray() {
+		return playerArr;
+	}
 
-public int getNumColumns() {
-	return numColumns;
-}
-
-public BoardCell getCell(int row, int col) {
-	return grid[row][col];
-}
-
-public Set<BoardCell> getAdjList(int row, int col) {
-	return grid[row][col].getAdjList();
-}
-
-public Set<BoardCell> getTargets() {
-	return targets;
-}
-
-public ArrayList<Card> getDeck() {
-	return deck;
-}
-
-public ArrayList<Player> getPlayerArray() {
-	return playerArr;
-}
-
-public Player getHumanPlayer() {
-	return humanPlayer;
-}
+	public Player getHumanPlayer() {
+		return humanPlayer;
+	}
 }

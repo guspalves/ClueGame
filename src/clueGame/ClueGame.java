@@ -30,6 +30,7 @@ public class ClueGame extends JFrame {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
 		
+		// Getting the human player's in hand cards to show
 		Player human = board.getHumanPlayer();
 		for(Card card : human.getCardArr()) {
 			if(card.getType() == CardType.ROOM) {
@@ -43,8 +44,6 @@ public class ClueGame extends JFrame {
 			}
 		}
 		
-		
-		
 		// format display for the game
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
@@ -57,7 +56,7 @@ public class ClueGame extends JFrame {
 		name = board.getHumanPlayer().getName();
 	}
 	
-	public void errorMessage() {
+	public void notFinishedMessage() {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, "Please finish your turn.", "Error Message", 0);
 	}
