@@ -145,12 +145,13 @@ public class GameControlPanel extends JPanel{
 		rollValue.setText(String.valueOf(roll));
 	}
 
-	private void setGuessResult(String guessResult) {
+	public void setGuessResult(String guessResult) {
 		guessResultPanel.setText(guessResult);
 	}
 
-	public void setGuess(String guess) {
+	public void setGuess(String guess, Color color) {
 		guessValue.setText(guess);
+		guessValue.setBackground(color);
 	}
 
 	public void setRollValue(int roll) {
@@ -196,7 +197,7 @@ public class GameControlPanel extends JPanel{
 
 		// test filling in the data
 		panel.setTurn(new ComputerPlayer( "Col. Mustard", Color.orange, 0, 0), 5);
-		panel.setGuess( "I have no guess!");
+		
 		panel.setGuessResult( "So you have nothing?");
 	}
 

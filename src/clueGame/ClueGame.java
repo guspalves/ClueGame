@@ -18,7 +18,11 @@ public class ClueGame extends JFrame {
 	private String name;
 	private static ClueGame clueGame = new ClueGame();
 	private SuggestionPanel suggestion;
+	private String suggestedPlayer, suggestedRoom, suggestedWeapon;
 	
+	
+	
+
 	// Constructor
 	public ClueGame(){
 		setSize(1000,1000);
@@ -63,6 +67,43 @@ public class ClueGame extends JFrame {
 		suggestion.setLocation(dim.width/2-suggestion.getSize().width/2 - 500, dim.height/2-suggestion.getSize().height/2);
 		
 		suggestion.setVisible(true);
+		
+	}
+	
+	public void suggestionSubmit() {
+		suggestedPlayer = suggestion.getPlayer();
+		suggestedRoom = suggestion.getRoom();
+		suggestedWeapon = suggestion.getWeapon();
+		
+		controlPanel.setGuess(suggestedPlayer + ", " + suggestedRoom + ", " + suggestedWeapon, board.getHumanPlayer().getColor());
+		
+		board.moveSuggestedPlayer(suggestedRoom);
+		Card temp = board.disproveSuggestion();
+		
+		if(temp == null) {
+			controlPanel.setGuessResult("No new clue");
+		}
+		else {
+			controlPanel.setGuessResult(temp.cardName);
+			board.getHumanPlayer().updateSeen(temp);
+			
+			switch(temp.getType()) {
+			case PERSON:
+				cardPanel.updatePeopleSeen(temp, Color.white);
+				cardPanel.repaint();
+				break;
+				
+			case ROOM:
+				cardPanel.updateRoomsSeen(temp, Color.white);
+				cardPanel.repaint();
+				break;
+				
+			case WEAPON:
+				cardPanel.updateWeaponSeen(temp, Color.white);
+				cardPanel.repaint();
+				break;
+			}
+		}
 	}
 	
 	public void humanPlayerAccusation() {
@@ -104,4 +145,18 @@ public class ClueGame extends JFrame {
 	public static ClueGame getInstance() {
 		return clueGame;
 	}
+	
+	// getters
+	public String getSuggestedPlayer() {
+		return suggestedPlayer;
+	}
+
+	public String getSuggestedRoom() {
+		return suggestedRoom;
+	}
+
+	public String getSuggestedWeapon() {
+		return suggestedWeapon;
+	}
+	
 }

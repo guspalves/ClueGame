@@ -773,7 +773,46 @@ public class Board extends JPanel implements MouseListener{
 		this.repaint();
 	}
 
+	public void moveSuggestedPlayer(String roomName) {
 
+		ClueGame game = ClueGame.getInstance();
+		String suggestedPlayerName = game.getSuggestedPlayer();
+		
+		for(Player p : playerArr) {
+			if(p.getName().equals(suggestedPlayerName)) {
+				p.setRow(roomMap.get(roomName.charAt(0)).getCenterCell().getRow());
+				p.setCol(roomMap.get(roomName.charAt(0)).getCenterCell().getCol());
+				this.repaint();
+				break;
+			}
+		}
+	}
+
+	public Card disproveSuggestion() {
+		ClueGame game = ClueGame.getInstance();
+		String susPlayer = game.getSuggestedPlayer();
+		String susRoom = game.getSuggestedRoom();
+		String susWeapon = game.getSuggestedWeapon();
+		Card susPlayerCard = new Card(susPlayer, CardType.PERSON);
+		Card susRoomCard = new Card(susRoom, CardType.ROOM);
+		Card susWeaponCard = new Card(susWeapon, CardType.WEAPON);
+		
+		for(Player p : playerArr) {
+			for(Card c : p.getCardArr()) {
+				if(c.equals(susPlayerCard)) {
+					return c;
+				}
+				else if(c.equals(susRoomCard)) {
+					return c;
+				}
+				else if(c.equals(susWeaponCard)) {
+					return c;
+				}
+			}
+		}
+		return null;
+	}
+	
 	/*
 	 * Getters
 	 */

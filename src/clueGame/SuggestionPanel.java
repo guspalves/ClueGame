@@ -160,7 +160,7 @@ public class SuggestionPanel extends JDialog {
 		playerBox = createPlayerBox();
 		playerBox.addActionListener(new ComboListener());
 		playerBox.setSelectedIndex(0);
-
+		
 		weaponBox = createWeaponBox();
 		weaponBox.addActionListener(new ComboListener());
 		weaponBox.setSelectedIndex(0);
@@ -235,7 +235,9 @@ public class SuggestionPanel extends JDialog {
 	private class SubmitButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println(room + " " + player + " " + weapon);
+			ClueGame game = ClueGame.getInstance();
+			game.suggestionSubmit();
+			dispose();
 		}
 	}
 

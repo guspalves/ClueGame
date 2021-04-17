@@ -266,6 +266,7 @@ public class GameCardPanel extends JPanel{
 	}
 	
 	public void updatePeopleSeen(Card personSeen, Color color) {
+		System.out.println("people");
 		JTextField tempField = new JTextField(personSeen.getCardName());
 		tempField.setBackground(color);
 		peopleSeenList.add(tempField);
@@ -279,6 +280,7 @@ public class GameCardPanel extends JPanel{
 	}
 	
 	public void updateRoomsSeen(Card roomSeen, Color color) {
+		System.out.println("room");
 		JTextField tempField = new JTextField(roomSeen.getCardName());
 		tempField.setBackground(color);
 		roomsSeenList.add(tempField);
@@ -292,6 +294,7 @@ public class GameCardPanel extends JPanel{
 	}
 	
 	public void updateWeaponSeen(Card weaponSeen, Color color) {
+		System.out.println("weapon");
 		JTextField tempField = new JTextField(weaponSeen.getCardName());
 		tempField.setBackground(color);
 		weaponSeenList.add(tempField);
