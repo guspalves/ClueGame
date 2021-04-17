@@ -65,7 +65,8 @@ public class GameControlPanel extends JPanel{
 
 		// Adding action to buttons
 		nextButton.addActionListener(new NextButtonListener());
-
+		accusationButton.addActionListener(new AccusationButtonListener());
+		
 		// Adding buttons to panel
 		panel.add(accusationButton);
 		panel.add(nextButton);
@@ -165,8 +166,23 @@ public class GameControlPanel extends JPanel{
 	private class NextButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			board.nextPlayerFlow();
+		}
+	}
+	
+	private class AccusationButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Board board = Board.getInstance();
+			
+			if(board.isSelectionMade()) {
+				ClueGame game = ClueGame.getInstance();
+				game.notYourTurn();
+				return;
+			}
+			
+			ClueGame game = ClueGame.getInstance();
+			game.humanPlayerAccusation();
 		}
 	}
 

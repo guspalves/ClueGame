@@ -7,7 +7,7 @@
 
 package clueGame;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -17,9 +17,8 @@ public class ClueGame extends JFrame {
 	private Board board;
 	private String name;
 	private static ClueGame clueGame = new ClueGame();
+	private SuggestionPanel suggestion;
 	
-	
-
 	// Constructor
 	public ClueGame(){
 		setSize(1000,1000);
@@ -44,7 +43,7 @@ public class ClueGame extends JFrame {
 			}
 		}
 		
-		// format display for the game
+		// format display for the game		
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardPanel, BorderLayout.EAST);
 		add(board, BorderLayout.CENTER);
@@ -56,6 +55,26 @@ public class ClueGame extends JFrame {
 		name = board.getHumanPlayer().getName();
 	}
 	
+	public void humanPlayerSuggestion(String roomName) {
+		suggestion = new SuggestionPanel(roomName);
+		suggestion.setSize(new Dimension(300, 150));
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		suggestion.setLocation(dim.width/2-suggestion.getSize().width/2 - 500, dim.height/2-suggestion.getSize().height/2);
+		
+		suggestion.setVisible(true);
+	}
+	
+	public void humanPlayerAccusation() {
+		suggestion = new SuggestionPanel();
+		suggestion.setSize(new Dimension(300, 150));
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		suggestion.setLocation(dim.width/2-suggestion.getSize().width/2 - 500, dim.height/2-suggestion.getSize().height/2);
+		
+		suggestion.setVisible(true);
+	}
+	
 	public void notFinishedMessage() {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, "Please finish your turn.", "Error Message", 0);
@@ -64,6 +83,11 @@ public class ClueGame extends JFrame {
 	public void notTargetMessage() {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, "Not a target.", "Error Message", 0);
+	}
+	
+	public void notYourTurn() {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "It is not your turn.", "Error Message", 0);
 	}
 	
 	public static void main(String[] args) {

@@ -762,6 +762,11 @@ public class Board extends JPanel implements MouseListener{
 		currentPlayer.setCol(selected.getCol());
 		temp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		temp.setOccupied(true);
+		if(selected.getInitial() != walkwayChar) {
+			ClueGame game = ClueGame.getInstance();
+			game.humanPlayerSuggestion(roomMap.get(selected.getInitial()).getRoomName());
+			
+		}
 
 		// Incrementing and repainting
 		playerCounter++;
@@ -816,4 +821,17 @@ public class Board extends JPanel implements MouseListener{
 	public Player getHumanPlayer() {
 		return humanPlayer;
 	}
+	
+	public ArrayList<Card> getWeaponArr() {
+		return weaponArr;
+	}
+	
+	public ArrayList<Card> getRoomArr() {
+		return roomArr;
+	}
+	
+	public boolean isSelectionMade() {
+		return selectionMade;
+	}
+
 }
