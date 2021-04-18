@@ -1,6 +1,11 @@
 package clueGame;
 
 public class Solution {
+	@Override
+	public String toString() {
+		return "Solution [person=" + person.getCardName() + ", room=" + room.getCardName() + ", weapon=" + weapon.getCardName() + "]";
+	}
+
 	private Card person;
 
 	private Card room;

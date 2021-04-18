@@ -789,6 +789,7 @@ public class Board extends JPanel implements MouseListener{
 	}
 
 	public Card disproveSuggestion() {
+		Card disproveCard = null;
 		ClueGame game = ClueGame.getInstance();
 		String susPlayer = game.getSuggestedPlayer();
 		String susRoom = game.getSuggestedRoom();
@@ -797,20 +798,16 @@ public class Board extends JPanel implements MouseListener{
 		Card susRoomCard = new Card(susRoom, CardType.ROOM);
 		Card susWeaponCard = new Card(susWeapon, CardType.WEAPON);
 		
+		Solution suggestion = new Solution(susPlayerCard, susRoomCard, susWeaponCard);
+		
 		for(Player p : playerArr) {
-			for(Card c : p.getCardArr()) {
-				if(c.equals(susPlayerCard)) {
-					return c;
-				}
-				else if(c.equals(susRoomCard)) {
-					return c;
-				}
-				else if(c.equals(susWeaponCard)) {
-					return c;
-				}
+			disproveCard = p.disproveSuggestion(suggestion);
+			if(disproveCard != null) {
+				break;
 			}
 		}
-		return null;
+		
+		return disproveCard;
 	}
 	
 	/*
