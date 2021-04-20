@@ -24,6 +24,8 @@ public abstract class Player {
 	protected ArrayList<Card> cardArr;
 	protected ArrayList<Card> deck;
 
+	
+
 	// Constructor
 	public Player(String name, Color color, int row, int col) {
 		super();
@@ -101,6 +103,10 @@ public abstract class Player {
 
 	public void setCol(int col) {
 		this.col = col;
+	}
+	
+	public ArrayList<Card> getDeck() {
+		return deck;
 	}
 	
 	/*

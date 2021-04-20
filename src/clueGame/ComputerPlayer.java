@@ -27,6 +27,7 @@ public class ComputerPlayer extends Player {
 		while(true){
 			// Random index
 			Random rand = new Random();
+			
 			int index = rand.nextInt(deck.size());
 			
 			// Checking if card is seen and if the card is a room

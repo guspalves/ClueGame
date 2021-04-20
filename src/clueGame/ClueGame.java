@@ -115,6 +115,18 @@ public class ClueGame extends JFrame {
 		JOptionPane.showMessageDialog(this, "You Lose!", "Loser", 0);
 		System.exit(0);
 	}
+	
+	public void computerWinMessage(String name) {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "You lose, " + name + " has won.", "Congratulations", 1);
+		System.exit(0);
+	}
+	
+	public void computerLoseMessage(String name) {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, name + " has lost.", "Loser", 0);
+		System.exit(0);
+	}
 
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
