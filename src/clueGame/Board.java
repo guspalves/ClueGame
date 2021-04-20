@@ -40,6 +40,7 @@ public class Board extends JPanel implements MouseListener{
 	private ArrayList<Character> targetRooms;
 	private boolean selectionMade;
 	private int errorCounter = 1;
+	private Color suggestionDisproveColor;
 
 	// Board constructor
 	private Board() {
@@ -53,6 +54,7 @@ public class Board extends JPanel implements MouseListener{
 
 	// Set up for the board
 	public void initialize() {
+		System.out.println("HELLO");
 		// Init for sets and arrays
 		totalDoorWays = new ArrayList<BoardCell>();
 		targets = new HashSet<BoardCell>();
@@ -70,8 +72,6 @@ public class Board extends JPanel implements MouseListener{
 			loadLayoutConfig();
 			calculateAdjacency();
 			deal();
-
-
 		} catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
 		}
@@ -446,7 +446,8 @@ public class Board extends JPanel implements MouseListener{
 		}
 	}
 
-	public void deal() throws BadConfigFormatException{
+	private void deal() throws BadConfigFormatException{
+		System.out.println("YO");
 		if(weaponArr.isEmpty() || roomArr.isEmpty() || playerArr.isEmpty()) {
 			throw new BadConfigFormatException("Full deck not provided");
 		}
@@ -455,17 +456,19 @@ public class Board extends JPanel implements MouseListener{
 
 		// Card indices for solution
 		Random random = new Random();
+		
 		int roomCardIndex = random.nextInt(roomArr.size());
 		int personCardIndex = random.nextInt(playerArr.size() - 1) + roomArr.size();
 		int weaponCardIndex = random.nextInt(weaponArr.size() - 2) + playerArr.size() + roomArr.size();
 
 		// geting cards for solution
-		Card roomCard = deck.get(roomCardIndex);
-		tempDeck.remove(roomCardIndex);
-		Card personCard = deck.get(personCardIndex);
-		tempDeck.remove(personCardIndex);
-		Card weaponCard = deck.get(weaponCardIndex);
+		Card roomCard = tempDeck.get(roomCardIndex);
+		Card personCard = tempDeck.get(personCardIndex);
+		Card weaponCard = tempDeck.get(weaponCardIndex);
+		
 		tempDeck.remove(weaponCardIndex);
+		tempDeck.remove(personCardIndex);	
+		tempDeck.remove(roomCardIndex);
 
 		// Creating solution
 		theAnswer = new Solution(personCard, roomCard, weaponCard);
@@ -614,6 +617,10 @@ public class Board extends JPanel implements MouseListener{
 	public void nextPlayerFlow() {	
 		// Updating current player
 		this.repaint();
+		GameControlPanel controlPanel = GameControlPanel.getInstance();
+		controlPanel.setGuessResult("", Color.white);
+		controlPanel.setGuess("", Color.white);
+		
 
 		// Getting current player and updating player
 		Player currentPlayer = playerArr.get(playerCounter);
@@ -645,7 +652,6 @@ public class Board extends JPanel implements MouseListener{
 		calcTargets(cell, roll);
 
 		// Setting roll value to display
-		GameControlPanel controlPanel = GameControlPanel.getInstance();
 		controlPanel.setRollValue(roll);
 
 		// Set the name to display
@@ -800,14 +806,41 @@ public class Board extends JPanel implements MouseListener{
 		
 		Solution suggestion = new Solution(susPlayerCard, susRoomCard, susWeaponCard);
 		
+		int counter = 0;
+		
 		for(Player p : playerArr) {
+			// Ensure player can't disprove his own suggestion
+			if(counter == playerCounter - 1) {
+				counter++;
+				continue;
+			}
+			
+			// Incrementation of counter
+			counter = counter++;
+			counter = counter % playerArr.size();
+
+			
 			disproveCard = p.disproveSuggestion(suggestion);
 			if(disproveCard != null) {
+				disproveCard.setColor(p.getColor());
+				suggestionDisproveColor = p.getColor();
 				break;
 			}
 		}
 		
+		
+		
 		return disproveCard;
+	}
+	
+	public void accusationHandling(Solution accusation) {
+		ClueGame game = ClueGame.getInstance();
+		
+		if(theAnswer.isSolution(accusation)) {
+			game.winMessage();
+		} else {
+			game.loseMessage();
+		}
 	}
 	
 	/*
@@ -868,6 +901,10 @@ public class Board extends JPanel implements MouseListener{
 	
 	public boolean isSelectionMade() {
 		return selectionMade;
+	}
+	
+	public Color getSuggestionDisproveColor() {
+		return suggestionDisproveColor;
 	}
 
 }

@@ -145,8 +145,9 @@ public class GameControlPanel extends JPanel{
 		rollValue.setText(String.valueOf(roll));
 	}
 
-	public void setGuessResult(String guessResult) {
+	public void setGuessResult(String guessResult, Color color) {
 		guessResultPanel.setText(guessResult);
+		guessResultPanel.setBackground(color);
 	}
 
 	public void setGuess(String guess, Color color) {
@@ -198,7 +199,7 @@ public class GameControlPanel extends JPanel{
 		// test filling in the data
 		panel.setTurn(new ComputerPlayer( "Col. Mustard", Color.orange, 0, 0), 5);
 		
-		panel.setGuessResult( "So you have nothing?");
+		panel.setGuessResult( "So you have nothing?", Color.white);
 	}
 
 }

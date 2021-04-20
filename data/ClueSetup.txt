@@ -14,7 +14,7 @@ Space, Unused, X
 Space, Walkway, W
 
 // Players List
-Player, Colonel Mustard, Yellow, Human, 4, 11
+Player, Colonel Mustard, Yellow, Human, 1, 9
 Player, Mr. Green, Green, Computer, 11, 1
 Player, Professor Plum, Pink, Computer, 17, 1
 Player, Mrs. Peacock, Blue, Computer, 23, 5

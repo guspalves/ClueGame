@@ -63,7 +63,7 @@ public class SuggestionPanel extends JDialog {
 		JLabel personLabel = new JLabel("Person");
 		JLabel weaponLabel = new JLabel("Weapon");
 		JButton submitButton = new JButton("Submit");
-		submitButton.addActionListener(new SubmitButtonListener());
+		submitButton.addActionListener(new SubmitAccusationButtonListener());
 
 		// Adding it to our panel
 		panel.add(currentRoomLabel);
@@ -136,7 +136,7 @@ public class SuggestionPanel extends JDialog {
 		JLabel personLabel = new JLabel("Person");
 		JLabel weaponLabel = new JLabel("Weapon");
 		JButton submitButton = new JButton("Submit");
-		submitButton.addActionListener(new SubmitButtonListener());
+		submitButton.addActionListener(new SubmitSuggestionButtonListener());
 
 		// Adding it to our panel
 		panel.add(currentRoomLabel);
@@ -232,11 +232,21 @@ public class SuggestionPanel extends JDialog {
 		}
 	}
 
-	private class SubmitButtonListener implements ActionListener{
+	private class SubmitSuggestionButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ClueGame game = ClueGame.getInstance();
 			game.suggestionSubmit();
+			dispose();
+		}
+	}
+	
+	private class SubmitAccusationButtonListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Board board = Board.getInstance();
+			Solution accusation = new Solution(new Card(player, CardType.PERSON), new Card(room, CardType.ROOM), new Card(weapon, CardType.WEAPON));
+			board.accusationHandling(accusation);
 			dispose();
 		}
 	}

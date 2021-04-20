@@ -13,10 +13,10 @@ import javax.swing.*;
 
 public class ClueGame extends JFrame {
 	private GameControlPanel controlPanel = GameControlPanel.getInstance();
-	private GameCardPanel cardPanel = new GameCardPanel();
+	private GameCardPanel cardPanel;
 	private Board board;
 	private String name;
-	private static ClueGame clueGame = new ClueGame();
+	private static ClueGame clueGame;
 	private SuggestionPanel suggestion;
 	private String suggestedPlayer, suggestedRoom, suggestedWeapon;
 
@@ -30,19 +30,7 @@ public class ClueGame extends JFrame {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
 
-		// Getting the human player's in hand cards to show
-		Player human = board.getHumanPlayer();
-		for(Card card : human.getCardArr()) {
-			if(card.getType() == CardType.ROOM) {
-				cardPanel.updateRoomsInHand(card);
-			}
-			if(card.getType() == CardType.WEAPON) {
-				cardPanel.updateWeaponInHand(card);
-			}
-			if(card.getType() == CardType.PERSON) {
-				cardPanel.updatePeopleInHand(card);
-			}
-		}
+		cardPanel = new GameCardPanel();
 
 		// format display for the game		
 		add(controlPanel, BorderLayout.SOUTH);
@@ -54,12 +42,9 @@ public class ClueGame extends JFrame {
 
 		// Setting the name of the player
 		name = board.getHumanPlayer().getName();
-	}
-	
-	public void updatePanel() {
-		clueGame.invalidate();
-		clueGame.repaint();
-		clueGame.revalidate();
+		Solution answer = board.getTheAnswer();
+		System.out.println(answer);
+		clueGame = this;
 	}
 
 	public void humanPlayerSuggestion(String roomName) {
@@ -84,30 +69,13 @@ public class ClueGame extends JFrame {
 		Card temp = board.disproveSuggestion();
 
 		if(temp == null) {
-			controlPanel.setGuessResult("No new clue");
+			controlPanel.setGuessResult("No new clue", Color.white);
 		}
 		else {
-			controlPanel.setGuessResult(temp.cardName);
+			Color disproveColor = board.getSuggestionDisproveColor();
+			controlPanel.setGuessResult(temp.cardName, disproveColor);
 			board.getHumanPlayer().updateSeen(temp);
-
-			switch(temp.getType()) {
-			case PERSON:
-				cardPanel.updatePeopleSeen(temp, Color.red);
-				updatePanel();
-				break;
-
-			case ROOM:
-				cardPanel.updateRoomsSeen(temp, Color.red);
-				updatePanel();
-
-				break;
-
-			case WEAPON:
-				cardPanel.updateWeaponSeen(temp, Color.red);
-				updatePanel();
-
-				break;
-			}
+			cardPanel.updatePanels();
 		}
 	}
 
@@ -136,6 +104,18 @@ public class ClueGame extends JFrame {
 		JOptionPane.showMessageDialog(this, "It is not your turn.", "Error Message", 0);
 	}
 
+	public void winMessage() {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "You Win!", "Congratulations", 1);
+		System.exit(0);
+	}
+
+	public void loseMessage() {
+		// Message Dialog
+		JOptionPane.showMessageDialog(this, "You Lose!", "Loser", 0);
+		System.exit(0);
+	}
+
 	public static void main(String[] args) {
 		ClueGame game = new ClueGame();
 		game.setVisible(true);
@@ -147,11 +127,11 @@ public class ClueGame extends JFrame {
 		board.nextPlayerFlow();
 	}
 
+	// Getters
 	public static ClueGame getInstance() {
 		return clueGame;
 	}
 
-	// getters
 	public String getSuggestedPlayer() {
 		return suggestedPlayer;
 	}
