@@ -603,29 +603,20 @@ public class Board extends JPanel implements MouseListener{
 			y = y + height;
 		}
 
-		int counter = 1;
+		int counter = 0;
 
 		// Draw players
 		for(int i = 0; i < playerArr.size(); i++) {
 			Player player = playerArr.get(i);
-
-			// Looping through so if any other players are on the same room, they don't get printed over each other
-			for(int j = 0; j < playerArr.size(); j++) {
-				if(j == i) {
-					counter = 1;
-					continue;
-				}
-				if(playerArr.get(i).getRow() == playerArr.get(j).getRow() && playerArr.get(i).getCol() == playerArr.get(j).getCol()) {
-					player.draw(g, player.getCol()*width + 15*counter, player.getRow()*height + 2, width - 4, height - 4);
+			
+			for(int j = 0; j < i; j++) {
+				if(playerArr.get(j).getCol() == player.getCol() && playerArr.get(j).getRow() == player.getRow()) {
 					counter++;
-					break;
 				}
-			}
-			if(counter != 1) {
-				continue;
 			}
 			
-			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
+			player.draw(g, player.getCol()*width + counter*width/2, player.getRow()*height, width, height);
+			counter = 0;
 		}
 
 		// Draw room names over the rooms
