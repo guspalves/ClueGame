@@ -66,7 +66,14 @@ public class ClueGame extends JFrame {
 		controlPanel.setGuess(suggestedPlayer + ", " + suggestedRoom + ", " + suggestedWeapon, board.getHumanPlayer().getColor());
 
 		board.moveSuggestedPlayer(suggestedRoom);
-		Card temp = board.disproveSuggestion();
+
+		Card susPlayerCard = new Card(suggestedPlayer, CardType.PERSON);
+		Card susRoomCard = new Card(suggestedRoom, CardType.ROOM);
+		Card susWeaponCard = new Card(suggestedWeapon, CardType.WEAPON);
+
+		Solution suggestion = new Solution(susPlayerCard, susRoomCard, susWeaponCard);
+
+		Card temp = board.handleSuggestion(suggestion);
 
 		if(temp == null) {
 			controlPanel.setGuessResult("No new clue", Color.white);
@@ -115,13 +122,13 @@ public class ClueGame extends JFrame {
 		JOptionPane.showMessageDialog(this, "You Lose!", "Loser", 0);
 		System.exit(0);
 	}
-	
+
 	public void computerWinMessage(String name) {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, "You lose, " + name + " has won.", "Congratulations", 1);
 		System.exit(0);
 	}
-	
+
 	public void computerLoseMessage(String name) {
 		// Message Dialog
 		JOptionPane.showMessageDialog(this, name + " has lost.", "Loser", 0);

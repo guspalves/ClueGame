@@ -515,12 +515,15 @@ public class Board extends JPanel implements MouseListener{
 			// Incrementation of counter
 			counter = counter++;
 			counter = counter % playerArr.size();
+			
 			if(p.disproveSuggestion(suggestion) != null){
 				temp = p.disproveSuggestion(suggestion);
 				temp.setColor(playerArr.get(playerCounter).getColor());
+				suggestionDisproveColor = playerArr.get(playerCounter).getColor();
 				return temp;
 			}
 		}
+		
 		notDisproved = true;
 		computerAccusation = suggestion;
 		return null;
@@ -600,17 +603,28 @@ public class Board extends JPanel implements MouseListener{
 			y = y + height;
 		}
 
+		int counter = 1;
+
 		// Draw players
 		for(int i = 0; i < playerArr.size(); i++) {
 			Player player = playerArr.get(i);
 
 			// Looping through so if any other players are on the same room, they don't get printed over each other
-			for(int j = i+1; j < playerArr.size(); j++) {
+			for(int j = 0; j < playerArr.size(); j++) {
+				if(j == i) {
+					counter = 1;
+					continue;
+				}
 				if(playerArr.get(i).getRow() == playerArr.get(j).getRow() && playerArr.get(i).getCol() == playerArr.get(j).getCol()) {
-					player.draw(g, player.getCol()*width + 10, player.getRow()*height + 2, width - 4, height - 4);
+					player.draw(g, player.getCol()*width + 15*counter, player.getRow()*height + 2, width - 4, height - 4);
+					counter++;
 					break;
 				}
 			}
+			if(counter != 1) {
+				continue;
+			}
+			
 			player.draw(g, player.getCol()*width + 2, player.getRow()*height + 2, width - 4, height - 4);
 		}
 
@@ -853,45 +867,6 @@ public class Board extends JPanel implements MouseListener{
 				break;
 			}
 		}
-	}
-
-	public Card disproveSuggestion() {
-		Card disproveCard = null;
-		ClueGame game = ClueGame.getInstance();
-		String susPlayer = game.getSuggestedPlayer();
-		String susRoom = game.getSuggestedRoom();
-		String susWeapon = game.getSuggestedWeapon();
-		Card susPlayerCard = new Card(susPlayer, CardType.PERSON);
-		Card susRoomCard = new Card(susRoom, CardType.ROOM);
-		Card susWeaponCard = new Card(susWeapon, CardType.WEAPON);
-
-		Solution suggestion = new Solution(susPlayerCard, susRoomCard, susWeaponCard);
-
-		int counter = 0;
-
-		for(Player p : playerArr) {
-			// Ensure player can't disprove his own suggestion
-			if(counter == playerCounter - 1) {
-				counter++;
-				continue;
-			}
-
-			// Incrementation of counter
-			counter = counter++;
-			counter = counter % playerArr.size();
-
-
-			disproveCard = p.disproveSuggestion(suggestion);
-			if(disproveCard != null) {
-				disproveCard.setColor(p.getColor());
-				suggestionDisproveColor = p.getColor();
-				break;
-			}
-		}
-
-
-
-		return disproveCard;
 	}
 
 	public void accusationHandling(Solution accusation) {
