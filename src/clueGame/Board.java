@@ -849,11 +849,16 @@ public class Board extends JPanel implements MouseListener{
 
 		ClueGame game = ClueGame.getInstance();
 		String suggestedPlayerName = game.getSuggestedPlayer();
-
+		int row = roomMap.get(roomName.charAt(0)).getCenterCell().getRow();
+		int col = roomMap.get(roomName.charAt(0)).getCenterCell().getCol();
+				
 		for(Player p : playerArr) {
 			if(p.getName().equals(suggestedPlayerName)) {
-				p.setRow(roomMap.get(roomName.charAt(0)).getCenterCell().getRow());
-				p.setCol(roomMap.get(roomName.charAt(0)).getCenterCell().getCol());
+				BoardCell tmp = getCell(p.getRow(), p.getCol());
+				tmp.setOccupied(false);				
+				p.setRow(row);
+				p.setCol(col);
+				
 				this.repaint();
 				break;
 			}
