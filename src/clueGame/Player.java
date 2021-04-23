@@ -23,8 +23,9 @@ public abstract class Player {
 
 	protected ArrayList<Card> cardArr;
 	protected ArrayList<Card> deck;
+	private boolean wasMoved;
 
-	
+
 
 	// Constructor
 	public Player(String name, Color color, int row, int col) {
@@ -109,6 +110,10 @@ public abstract class Player {
 		return deck;
 	}
 	
+	public void setWasMoved(boolean wasMoved) {
+		this.wasMoved = wasMoved;
+	}
+	
 	/*
 	 * Getters
 	 */
@@ -134,6 +139,10 @@ public abstract class Player {
 
 	public Set<Card> getSeen() {
 		return seen;
+	}
+
+	public boolean getWasMoved() {
+		return wasMoved;
 	}
 
 }

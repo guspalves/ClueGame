@@ -515,7 +515,7 @@ public class Board extends JPanel implements MouseListener{
 			// Incrementation of counter
 			counter = counter++;
 			counter = counter % playerArr.size();
-			
+
 			if(p.disproveSuggestion(suggestion) != null){
 				temp = p.disproveSuggestion(suggestion);
 				temp.setColor(playerArr.get(playerCounter).getColor());
@@ -523,7 +523,7 @@ public class Board extends JPanel implements MouseListener{
 				return temp;
 			}
 		}
-		
+
 		notDisproved = true;
 		computerAccusation = suggestion;
 		return null;
@@ -573,6 +573,12 @@ public class Board extends JPanel implements MouseListener{
 					grid[i][j].draw(g, Color.yellow, Color.black, x - width, y, width, height);
 				}
 
+				// TODO delete this 
+				// visualize if the cell is occupied
+				if(grid[i][j].getIsOccupied()) {
+					grid[i][j].draw(g, Color.gray, Color.black, x - width, y, width, height);
+				}
+
 				for(int k = 0; k < targetRooms.size(); k++) {
 					if(grid[i][j].getInitial() == targetRooms.get(k)) {
 						grid[i][j].draw(g, Color.yellow, Color.yellow, x - width, y, width, height);
@@ -608,13 +614,13 @@ public class Board extends JPanel implements MouseListener{
 		// Draw players
 		for(int i = 0; i < playerArr.size(); i++) {
 			Player player = playerArr.get(i);
-			
+
 			for(int j = 0; j < i; j++) {
 				if(playerArr.get(j).getCol() == player.getCol() && playerArr.get(j).getRow() == player.getRow()) {
 					counter++;
 				}
 			}
-			
+
 			player.draw(g, player.getCol()*width + counter*width/2, player.getRow()*height, width, height);
 			counter = 0;
 		}
@@ -649,7 +655,7 @@ public class Board extends JPanel implements MouseListener{
 
 		// Ensuring the user has finished his turn before moving on
 		if(currentPlayer instanceof HumanPlayer) {
-			if(!((HumanPlayer) currentPlayer).isFinished()){
+			if(!((HumanPlayer) currentPlayer).isFinished() && targets != null){
 				// Throwing new error message
 				ClueGame game = ClueGame.getInstance();
 				game.notFinishedMessage();
@@ -684,6 +690,11 @@ public class Board extends JPanel implements MouseListener{
 		// Setting temp BoardCell
 		BoardCell cell = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		calcTargets(cell, roll);
+		
+		// If the player was previously moved, let them stay in the room
+		if(currentPlayer.getWasMoved()) {
+			targets.add(getCell(currentPlayer.getRow(), currentPlayer.getCol()));
+		}
 
 		// Setting roll value to display
 		controlPanel.setRollValue(roll);
@@ -716,41 +727,47 @@ public class Board extends JPanel implements MouseListener{
 		BoardCell tmp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		tmp.setOccupied(false);
 
-		// Moving computer players to new cell and setting it to be occupied
-		BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
-		fin.setOccupied(true);
-		currentPlayer.setRow(fin.getRow());
-		currentPlayer.setCol(fin.getCol());
+		// move the computer player if there are available targets
+		if(targets != null) {
+			// Moving computer players to new cell and setting it to be occupied
+			BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
+			fin.setOccupied(true);
+			currentPlayer.setRow(fin.getRow());
+			currentPlayer.setCol(fin.getCol());
 
-		if(fin.getInitial() != walkwayChar) {
-			Card roomCard = new Card(roomMap.get(fin.getInitial()).getRoomName(), CardType.ROOM);
+			// have the computer make a suggestion when they enter a room
+			if(fin.getInitial() != walkwayChar) {
+				Card roomCard = new Card(roomMap.get(fin.getInitial()).getRoomName(), CardType.ROOM);
 
-			Solution computerSuggestion = ((ComputerPlayer) currentPlayer).createSuggestion(roomCard);
+				Solution computerSuggestion = ((ComputerPlayer) currentPlayer).createSuggestion(roomCard);
 
-			String person = computerSuggestion.getPerson().getCardName();
-			String room = computerSuggestion.getRoom().getCardName();
-			String weapon = computerSuggestion.getWeapon().getCardName();
+				String person = computerSuggestion.getPerson().getCardName();
+				String room = computerSuggestion.getRoom().getCardName();
+				String weapon = computerSuggestion.getWeapon().getCardName();
 
-			controlPanel.setGuess(person + ", " + room + ", " + weapon, currentPlayer.getColor());
+				controlPanel.setGuess(person + ", " + room + ", " + weapon, currentPlayer.getColor());
 
-			for(Player p : playerArr) {
-				if(p.getName().equals(person)) {
-					p.setRow(fin.getRow());
-					p.setCol(fin.getCol());
-					break;
+				for(Player p : playerArr) {
+					if(p.getName().equals(person)) {
+						BoardCell temp = getCell(p.getRow(), p.getCol());
+						temp.setOccupied(false);				
+						p.setWasMoved(true);
+						p.setRow(fin.getRow());
+						p.setCol(fin.getCol());
+						break;
+					}
 				}
-			}
-
-			Card temp = handleSuggestion(computerSuggestion);
-			if(temp == null) {
-				controlPanel.setGuessResult("No new clue", Color.white);
-			}
-			else {
-				Color disproveColor = this.getSuggestionDisproveColor();
-				controlPanel.setGuessResult(temp.cardName, disproveColor);
-				currentPlayer.updateSeen(temp);
-				controlPanel.setGuessResult("Suggestion Disproven", temp.getColor());
-
+				
+				Card temp = handleSuggestion(computerSuggestion);
+				if(temp == null) {
+					controlPanel.setGuessResult("No new clue", Color.white);
+				}
+				else {
+					Color disproveColor = this.getSuggestionDisproveColor();
+					controlPanel.setGuessResult(temp.cardName, disproveColor);
+					currentPlayer.updateSeen(temp);
+					controlPanel.setGuessResult("Suggestion Disproven", temp.getColor());
+				}
 			}
 		}
 	}
@@ -851,14 +868,14 @@ public class Board extends JPanel implements MouseListener{
 		String suggestedPlayerName = game.getSuggestedPlayer();
 		int row = roomMap.get(roomName.charAt(0)).getCenterCell().getRow();
 		int col = roomMap.get(roomName.charAt(0)).getCenterCell().getCol();
-				
+
 		for(Player p : playerArr) {
 			if(p.getName().equals(suggestedPlayerName)) {
 				BoardCell tmp = getCell(p.getRow(), p.getCol());
 				tmp.setOccupied(false);				
 				p.setRow(row);
 				p.setCol(col);
-				
+				p.setWasMoved(true);
 				this.repaint();
 				break;
 			}
