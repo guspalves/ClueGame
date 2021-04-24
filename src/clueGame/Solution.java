@@ -1,16 +1,17 @@
+/**
+ * @author Gustavo Alves
+ * @author Noah Terry
+ * 
+ * Description: Class for the Solution data type
+ */
 package clueGame;
 
 public class Solution {
-	@Override
-	public String toString() {
-		return "Solution [person=" + person.getCardName() + ", room=" + room.getCardName() + ", weapon=" + weapon.getCardName() + "]";
-	}
-
 	private Card person;
-
 	private Card room;
 	private Card weapon;
 	
+	// Constructor
 	public Solution(Card person, Card room, Card weapon) {
 		super();
 		this.person = person;
@@ -18,10 +19,12 @@ public class Solution {
 		this.weapon = weapon;
 	}
 	
+	// Testing if combination of cards create solution
 	public boolean isSolution(Card person, Card room, Card weapon) {
 		return (this.person.equals(person)) && (this.room.equals(room)) && (this.weapon.equals(weapon));
 	}
 	
+	// Testing if a solution is the same as another solution
 	public boolean isSolution(Solution s) {
 		return (this.person.equals(s.person)) && (this.room.equals(s.room)) && (this.weapon.equals(s.weapon));
 	}

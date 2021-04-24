@@ -337,7 +337,7 @@ public class Board extends JPanel implements MouseListener{
 	public void calculateAdjacency() {
 		// Calculating which door ways lead to what rooms
 		parseDoorways();
-
+		
 		// Looping through grid
 		for(int i = 0; i < numRows; i++) {
 			for(int j = 0; j < numColumns; j++) {
@@ -413,9 +413,10 @@ public class Board extends JPanel implements MouseListener{
 	}
 
 	public void findAllTargets(BoardCell startCell, int pathlength) {
+		
 		// Obtaining set of adjacency of startCell
 		Set<BoardCell> adjacentCells = startCell.getAdjList();
-
+		
 		// for each loop to go through adjacency set for startCell
 		for(BoardCell adjCell : adjacentCells) {
 			// check if the cell is occupied or has been visited
@@ -525,7 +526,7 @@ public class Board extends JPanel implements MouseListener{
 		}
 
 		notDisproved = true;
-		computerAccusation = suggestion;
+		computerAccusation = theAnswer;
 		return null;
 	}
 
@@ -643,7 +644,7 @@ public class Board extends JPanel implements MouseListener{
 	}
 
 	//Next button logic
-	public void nextPlayerFlow() {	
+	public void nextPlayerFlow() {
 		// Updating current player
 		this.repaint();
 		GameControlPanel controlPanel = GameControlPanel.getInstance();
@@ -655,7 +656,7 @@ public class Board extends JPanel implements MouseListener{
 
 		// Ensuring the user has finished his turn before moving on
 		if(currentPlayer instanceof HumanPlayer) {
-			if(!((HumanPlayer) currentPlayer).isFinished() && targets != null){
+			if(!((HumanPlayer) currentPlayer).isFinished() && !targets.isEmpty()){
 				// Throwing new error message
 				ClueGame game = ClueGame.getInstance();
 				game.notFinishedMessage();
@@ -685,7 +686,7 @@ public class Board extends JPanel implements MouseListener{
 		// Getting roll value
 		Random rand = new Random();
 		int roll = rand.nextInt(6)+1;
-
+		
 		// Calculating targets
 		// Setting temp BoardCell
 		BoardCell cell = getCell(currentPlayer.getRow(), currentPlayer.getCol());
@@ -694,6 +695,7 @@ public class Board extends JPanel implements MouseListener{
 		// If the player was previously moved, let them stay in the room
 		if(currentPlayer.getWasMoved()) {
 			targets.add(getCell(currentPlayer.getRow(), currentPlayer.getCol()));
+			currentPlayer.setWasMoved(false);
 		}
 
 		// Setting roll value to display
@@ -727,8 +729,18 @@ public class Board extends JPanel implements MouseListener{
 		BoardCell tmp = getCell(currentPlayer.getRow(), currentPlayer.getCol());
 		tmp.setOccupied(false);
 
-		// move the computer player if there are available targets
-		if(targets != null) {
+		// move the computer player if there are available targets		
+		
+		// Checking if the only target available is the one the player is on
+		if(targets.size() == 1) {
+			for(BoardCell boardCell : targets) {
+				if(boardCell.getRow() == currentPlayer.getRow() && boardCell.getCol() == currentPlayer.getCol()) {
+					targets.clear();
+				}
+			}
+		}
+		
+		if(!targets.isEmpty()) {
 			// Moving computer players to new cell and setting it to be occupied
 			BoardCell fin = ((ComputerPlayer) currentPlayer).selectTargets(targets);
 			fin.setOccupied(true);
@@ -863,12 +875,15 @@ public class Board extends JPanel implements MouseListener{
 	}
 
 	public void moveSuggestedPlayer(String roomName) {
-
+		// Moving selected player from suggestion
 		ClueGame game = ClueGame.getInstance();
+		
+		// Getting the center cell of selected room
 		String suggestedPlayerName = game.getSuggestedPlayer();
 		int row = roomMap.get(roomName.charAt(0)).getCenterCell().getRow();
 		int col = roomMap.get(roomName.charAt(0)).getCenterCell().getCol();
 
+		// Looping through players to find target player and move them to center cell of room
 		for(Player p : playerArr) {
 			if(p.getName().equals(suggestedPlayerName)) {
 				BoardCell tmp = getCell(p.getRow(), p.getCol());
@@ -885,6 +900,7 @@ public class Board extends JPanel implements MouseListener{
 	public void accusationHandling(Solution accusation) {
 		ClueGame game = ClueGame.getInstance();
 
+		// Checking if the accusation is the solution. Displaying message based on if it's solution or not
 		if(theAnswer.isSolution(accusation)) {
 			game.winMessage();
 		} else {

@@ -42,29 +42,36 @@ public class GameCardPanel extends JPanel{
 
 
 	public void updatePanels() {
+		// Clearing panel
 		mainPanel.removeAll();
 
+		// Rebuilding panels
 		updatePanel(personPanel, CardType.PERSON);
 		updatePanel(roomPanel, CardType.ROOM);
 		updatePanel(weaponPanel, CardType.WEAPON);
 
+		// Adding new panels to mainPanel
 		mainPanel.add(personPanel);
 		mainPanel.add(roomPanel);
 		mainPanel.add(weaponPanel);
 
+		// Revalidation of mainPanel
 		mainPanel.repaint();
 		mainPanel.revalidate();
 	}
 
 	//New Update
 	private void updatePanel(JPanel panel, CardType type) {
+		// Grabbing board
 		Board board = Board.getInstance();
 		HumanPlayer player = (HumanPlayer) board.getHumanPlayer();
 
+		// Clearing panel
 		panel.removeAll();
 
 		panel.setLayout(new GridLayout(0, 1));
 
+		// Figuring out the title of the panel
 		if(type == CardType.PERSON) {
 			panel.setBorder(new TitledBorder(new EtchedBorder(), "People"));
 		} else if (type == CardType.ROOM) {
@@ -73,11 +80,13 @@ public class GameCardPanel extends JPanel{
 			panel.setBorder(new TitledBorder(new EtchedBorder(), "Weapon"));
 		}
 
+		// Adding the in hand cards of the user to the panel
 		JLabel titleLabel = new JLabel("In Hand:");
 		panel.add(titleLabel);
 
 		ArrayList<Card> inHandCards = player.getCardArr();
 
+		// Setting up counter to see if no cards of selected type are in hand
 		int counter = 0;
 
 		for(Card card : inHandCards) {
@@ -89,18 +98,21 @@ public class GameCardPanel extends JPanel{
 			}
 		}
 
+		// Printing none to the in hand cards
 		if(counter == 0) {
 			JTextField emptyField = new JTextField("None");
 			emptyField.setEditable(false);
 			panel.add(emptyField);
 		}
 
-
+		
+		// Creating the seen section
 		titleLabel.setText("Seen:");
 		panel.add(titleLabel);
 
 		Set<Card> seenCards = player.getSeen();
 
+		// Resetting counter
 		counter = 0;
 
 		for(Card card : seenCards) {
@@ -113,12 +125,14 @@ public class GameCardPanel extends JPanel{
 			}
 		}
 
+		// Placing the none in the seen category 
 		if(counter == 0) {
 			JTextField emptyField = new JTextField("None");
 			emptyField.setEditable(false);
 			panel.add(emptyField);
 		}
 
+		// Revalidation of panel
 		panel.repaint();
 		panel.revalidate();
 	}

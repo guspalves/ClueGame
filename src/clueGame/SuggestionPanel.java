@@ -228,6 +228,7 @@ public class SuggestionPanel extends JDialog {
 	private class CancelButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// Closing window
 			dispose();
 		}
 	}
@@ -236,7 +237,11 @@ public class SuggestionPanel extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ClueGame game = ClueGame.getInstance();
+			
+			// Calling function to handle suggestions
 			game.suggestionSubmit();
+			
+			// Closing window
 			dispose();
 		}
 	}
@@ -245,8 +250,12 @@ public class SuggestionPanel extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Board board = Board.getInstance();
+			
+			// Creating suggestion and handling it
 			Solution accusation = new Solution(new Card(player, CardType.PERSON), new Card(room, CardType.ROOM), new Card(weapon, CardType.WEAPON));
 			board.accusationHandling(accusation);
+			
+			// Closing window
 			dispose();
 		}
 	}
@@ -254,6 +263,7 @@ public class SuggestionPanel extends JDialog {
 	private class ComboListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// Setting each variable to selected option by user
 			if(e.getSource() == weaponBox) {
 				weapon = weaponBox.getSelectedItem().toString();
 			} else if (e.getSource() == playerBox) {

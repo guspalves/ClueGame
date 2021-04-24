@@ -45,20 +45,20 @@ class gameSetupTests {
 	public void TestHumanPlayer() {
 		ArrayList<Player> playerArr = board.getPlayerArray();
 		HumanPlayer tmp = (HumanPlayer) playerArr.get(0);
-		assertTrue(tmp.getName().equals("Colonel Mustard"));
-		assertTrue(tmp.getColor() == Color.yellow);
-		assertEquals(tmp.getRow(), 1);
-		assertEquals(tmp.getCol(), 9);
+		assertTrue(tmp.getName().equals("Miss Scarlet"));
+		assertTrue(tmp.getColor().equals(new Color(255,87,51)));
+		assertEquals(tmp.getRow(), 2);
+		assertEquals(tmp.getCol(), 10);
 	}
 	
 	@Test
 	public void TestComputerPlayer() {
 		ArrayList<Player> playerArr = board.getPlayerArray();
 		ComputerPlayer tmp = (ComputerPlayer) playerArr.get(5);
-		assertTrue(tmp.getName().equals("Miss Scarlet"));
-		assertTrue(tmp.getColor().equals(new Color(255,87,51)));
-		assertEquals(tmp.getRow(), 13);
-		assertEquals(tmp.getCol(), 21);
+		assertTrue(tmp.getName().equals("Colonel Mustard"));
+		assertTrue(tmp.getColor() == Color.yellow);
+		assertEquals(tmp.getRow(), 14);
+		assertEquals(tmp.getCol(), 22);
 	}
 	
 	@Test
@@ -75,9 +75,9 @@ class gameSetupTests {
 		assertTrue(deck.get(8).getCardName().equals("Bedroom"));
 		
 		assertTrue(deck.get(9).getType().equals(CardType.PERSON));
-		assertTrue(deck.get(9).getCardName().equals("Colonel Mustard"));
+		assertTrue(deck.get(9).getCardName().equals("Miss Scarlet"));
 		assertTrue(deck.get(14).getType().equals(CardType.PERSON));
-		assertTrue(deck.get(14).getCardName().equals("Miss Scarlet"));
+		assertTrue(deck.get(14).getCardName().equals("Colonel Mustard"));
 		
 		assertTrue(deck.get(15).getType().equals(CardType.WEAPON));
 		assertTrue(deck.get(15).getCardName().equals("Revolver"));

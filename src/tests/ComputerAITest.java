@@ -87,11 +87,7 @@ class ComputerAITest {
 		// Calculating targets
 		board.calcTargets(board.getCell(6, 6), 2);
 		Set<BoardCell> targets = board.getTargets();
-		
-		// Ensuring function works for a room in list, and making sure it doesn't return to that room
-		assertTrue(computerPlayer.selectTargets(targets).equals(board.getCell(8,  2)));
-		assertFalse(computerPlayer.selectTargets(targets).equals(board.getCell(8,  2)));
-		
+				
 		// Creating second player and ensuring function works when no rooms are on list
 		ComputerPlayer computerPlayer2 = new ComputerPlayer("Jim Jhonson", Color.green, 13, 14);
 		board.calcTargets(board.getCell(13, 14), 2);
